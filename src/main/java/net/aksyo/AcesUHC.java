@@ -9,6 +9,7 @@ public class AcesUHC extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        System.out.println("Test");
     }
 
     @Override
