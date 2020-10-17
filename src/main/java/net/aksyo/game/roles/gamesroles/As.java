@@ -3,17 +3,16 @@ package net.aksyo.game.roles.gamesroles;
 import net.aksyo.game.roles.GameRole;
 import net.aksyo.game.roles.Team;
 
-public class Joker extends GameRole {
-
+public class As extends GameRole {
 
     @Override
     public String getName() {
-        return "Joker";
+        return "As";
     }
 
     @Override
     public String getGameName() {
-        return "§6Joker";
+        return "§3As";
     }
 
     @Override
@@ -23,13 +22,12 @@ public class Joker extends GameRole {
 
     @Override
     public boolean isAs() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isJoker() {
-        return true;
+        return false;
     }
-
 
 }
