@@ -13,6 +13,9 @@ public class AcesUHC extends JavaPlugin {
     private TeamManager teamManager;
     private WorldManager worldManager;
 
+    private String path = getDataFolder().getPath();
+
+
     @Override
     public void onEnable() {
         instance = this;
@@ -30,5 +33,22 @@ public class AcesUHC extends JavaPlugin {
 
     public static final AcesUHC getInstance() {
         return instance;
+    }
+
+
+    public final String getPath() {
+        return path;
+    }
+
+    public GameManager getGameManager() {
+        return gameManager;
+    }
+
+    public TeamManager getTeamManager() {
+        return teamManager;
+    }
+
+    public WorldManager getWorldManager() {
+        return worldManager;
     }
 }
