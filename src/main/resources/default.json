@@ -1,0 +1,31 @@
+{
+  "gamename": "&3Test",
+  "host": "&6Aksyo",
+  "roles": {
+    "joker": "&5Joker",
+    "as": "&6As",
+    "pion": "&9Pion"
+  },
+  "teams": [
+    {
+      "name": "&cCarreaux",
+      "message": "&bVous etes dans l'equipe des &cCarreaux"
+    },
+    {
+      "name": "&cCoeur",
+      "message": "&bVous etes dans l'equipe des &cCoeur"
+    },
+    {
+      "name": "&7Piques",
+      "message": "&bVous etes dans l'equipe des &7Piques"
+    },
+    {
+      "name": "&7Trefle",
+      "message": "&bVous etes dans l'equipe des &7Trefle"
+    },
+    {
+      "name": "&6Joker",
+      "message": "&bVous etes dans l'equipe du &6Joker"
+    }
+  ]
+}
