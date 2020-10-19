@@ -1,25 +1,26 @@
-package net.aksyo.game.roles.teams;
+package net.aksyo.game.teams;
 
 import net.aksyo.game.roles.GameRole;
 import net.aksyo.game.roles.RoleType;
 import net.aksyo.game.roles.Team;
 
-public class TrefleTeam implements Team {
+public class PiquesTeam implements Team {
 
-    private static TrefleTeam instance = new TrefleTeam();
+    private static PiquesTeam instance = new PiquesTeam();
 
-    public static TrefleTeam getInstance() {
+    public static PiquesTeam getInstance() {
         return instance;
     }
 
+
     @Override
     public String getName() {
-        return "Trefle";
+        return "Piques";
     }
 
     @Override
     public String getGameName() {
-        return "§Trefle";
+        return "§2Piques";
     }
 
     @Override
@@ -30,8 +31,8 @@ public class TrefleTeam implements Team {
     @Override
     public GameRole[] getRoles() {
         return new GameRole[] {
-            RoleType.AS.get(),
-            RoleType.PION.get()
+                RoleType.AS.get(),
+                RoleType.PION.get()
         };
     }
 }

@@ -1,4 +1,4 @@
-package net.aksyo.game.roles.teams;
+package net.aksyo.game.teams;
 
 import net.aksyo.game.roles.GameRole;
 import net.aksyo.game.roles.RoleType;
