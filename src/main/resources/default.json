@@ -4,7 +4,8 @@
   "roles": {
     "joker": "&5Joker",
     "as": "&6As",
-    "pion": "&9Pion"
+    "pion": "&9Pion",
+    "pionfourbe": "§3Pion Fourbe"
   },
   "teams": [
     {

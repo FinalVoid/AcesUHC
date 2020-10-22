@@ -9,4 +9,6 @@ public class TeamModel {
         this.name = name;
         this.message = message;
     }
+
+
 }

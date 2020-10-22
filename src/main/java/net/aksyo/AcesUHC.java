@@ -3,7 +3,11 @@ package net.aksyo;
 import net.aksyo.game.managers.GameManager;
 import net.aksyo.game.managers.TeamManager;
 import net.aksyo.game.managers.WorldManager;
+import net.aksyo.json.FileManager;
+import net.aksyo.json.model.GameModel;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
 
 public class AcesUHC extends JavaPlugin {
 
@@ -12,6 +16,8 @@ public class AcesUHC extends JavaPlugin {
     private GameManager gameManager;
     private TeamManager teamManager;
     private WorldManager worldManager;
+
+    private GameModel gameModel;
 
     private String path = getDataFolder().getPath();
 
@@ -23,6 +29,12 @@ public class AcesUHC extends JavaPlugin {
         this.gameManager = new GameManager();
         this.teamManager = new TeamManager();
         this.worldManager = new WorldManager();
+
+        try {
+            gameModel = new FileManager(path).getGameModel();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
 
     }
 
@@ -51,4 +63,9 @@ public class AcesUHC extends JavaPlugin {
     public WorldManager getWorldManager() {
         return worldManager;
     }
+
+    public GameModel getGameModel() {
+        return gameModel;
+    }
+
 }

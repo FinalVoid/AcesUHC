@@ -1,7 +1,7 @@
 package net.aksyo.game.roles.gamesroles;
 
+import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.GameRole;
-import net.aksyo.game.roles.Team;
 
 public class Pion extends GameRole {
 
@@ -12,17 +12,12 @@ public class Pion extends GameRole {
 
     @Override
     public String getGameName() {
-        return "§5Pion";
+        return AcesUHC.getInstance().getGameModel().roles.get("as").replace("&", "§");
     }
 
     @Override
     public String getDescription() {
         return null;
-    }
-
-    @Override
-    public boolean isAs() {
-        return false;
     }
 
     @Override
