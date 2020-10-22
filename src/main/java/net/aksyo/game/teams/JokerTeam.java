@@ -2,7 +2,10 @@ package net.aksyo.game.teams;
 
 import net.aksyo.game.roles.GameRole;
 import net.aksyo.game.roles.RoleType;
+import net.aksyo.game.roles.SubRole;
 import net.aksyo.game.roles.Team;
+
+import java.util.Map;
 
 public class JokerTeam implements Team {
 
@@ -30,5 +33,10 @@ public class JokerTeam implements Team {
     @Override
     public GameRole[] getRoles() {
         return new GameRole[] { RoleType.JOKER.get() } ;
+    }
+
+    @Override
+    public Map<SubRole, Integer> getSubRoles() {
+        return null;
     }
 }

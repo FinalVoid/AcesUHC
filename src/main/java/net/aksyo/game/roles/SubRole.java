@@ -1,6 +1,8 @@
 package net.aksyo.game.roles;
 
-public abstract class GameRole {
+import net.aksyo.player.AcePlayer;
+
+public abstract class SubRole {
 
 
     public abstract String getName();
@@ -8,6 +10,6 @@ public abstract class GameRole {
 
     public abstract String getDescription();
 
-    public abstract boolean isJoker();
+    public abstract void revealAction(AcePlayer player);
 
 }

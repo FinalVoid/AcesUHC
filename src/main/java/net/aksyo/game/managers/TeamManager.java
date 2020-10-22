@@ -2,6 +2,7 @@ package net.aksyo.game.managers;
 
 import net.aksyo.game.roles.RoleType;
 import net.aksyo.game.roles.Team;
+import net.aksyo.game.roles.gamesroles.subroles.SubRoleType;
 import net.aksyo.game.teams.*;
 import net.aksyo.player.AcePlayer;
 import org.bukkit.entity.Player;
@@ -24,8 +25,8 @@ public class TeamManager {
         TEAMS.put(JokerTeam.getInstance(), new HashSet<>());
     }
 
-    public void setTeam(Player player, Team team, RoleType roleType) {
-        TEAMS.get(team).add(new AcePlayer(player, team, roleType));
+    public void setTeam(Player player, Team team, RoleType roleType, SubRoleType subRoleType) {
+        TEAMS.get(team).add(new AcePlayer(player, team, roleType, subRoleType));
     }
 
     public boolean isPlayerDead(AcePlayer player) {
@@ -33,6 +34,7 @@ public class TeamManager {
     }
 
     public boolean revivePlayer(AcePlayer player) {
+        player.revive();
         return deadPlayers.remove(player);
     }
 

@@ -1,5 +1,7 @@
 package net.aksyo.game.roles;
 
+import java.util.Map;
+
 public interface Team {
 
     public String getName();
@@ -9,5 +11,7 @@ public interface Team {
     public String getDescription();
 
     public GameRole[] getRoles();
+
+    public Map<SubRole, Integer> getSubRoles();
 
 }
