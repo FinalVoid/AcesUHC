@@ -1,5 +1,6 @@
 package net.aksyo.game.teams;
 
+import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.GameRole;
 import net.aksyo.game.roles.RoleType;
 import net.aksyo.game.roles.SubRole;
@@ -17,20 +18,16 @@ public class CoeurTeam implements Team {
         return instance;
     }
 
-    private Map<SubRole, Integer> subRoleMap = new HashMap<>();
 
-    {
-        subRoleMap.put(SubRoleType.PIONFOURBE.get(), 1);
-    }
 
     @Override
     public String getName() {
-        return "Coeur";
+        return "coeur";
     }
 
     @Override
     public String getGameName() {
-        return "§cCoeur";
+        return AcesUHC.getInstance().getGameModel().teamModelList.get(getName());
     }
 
     @Override
@@ -46,8 +43,4 @@ public class CoeurTeam implements Team {
         };
     }
 
-    @Override
-    public Map<SubRole, Integer> getSubRoles() {
-        return subRoleMap;
-    }
 }

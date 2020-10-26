@@ -12,6 +12,5 @@ public interface Team {
 
     public GameRole[] getRoles();
 
-    public Map<SubRole, Integer> getSubRoles();
 
 }

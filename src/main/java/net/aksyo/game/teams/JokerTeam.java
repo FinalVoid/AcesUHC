@@ -1,5 +1,6 @@
 package net.aksyo.game.teams;
 
+import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.GameRole;
 import net.aksyo.game.roles.RoleType;
 import net.aksyo.game.roles.SubRole;
@@ -17,12 +18,12 @@ public class JokerTeam implements Team {
 
     @Override
     public String getName() {
-        return "Joker";
+        return "joker";
     }
 
     @Override
     public String getGameName() {
-        return "§2Joker";
+        return AcesUHC.getInstance().getGameModel().teamModelList.get(getName());
     }
 
     @Override
@@ -35,8 +36,4 @@ public class JokerTeam implements Team {
         return new GameRole[] { RoleType.JOKER.get() } ;
     }
 
-    @Override
-    public Map<SubRole, Integer> getSubRoles() {
-        return null;
-    }
 }
