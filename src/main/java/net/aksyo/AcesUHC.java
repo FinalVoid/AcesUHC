@@ -1,5 +1,6 @@
 package net.aksyo;
 
+import net.aksyo.command.CommandHandler;
 import net.aksyo.game.managers.GameManager;
 import net.aksyo.game.managers.TeamManager;
 import net.aksyo.game.managers.WorldManager;
@@ -30,6 +31,8 @@ public class AcesUHC extends JavaPlugin {
         this.teamManager = new TeamManager();
         this.worldManager = new WorldManager();
 
+        registerCommands();
+
         try {
             gameModel = new FileManager(path).getGameModel();
         } catch (IOException exception) {
@@ -46,7 +49,6 @@ public class AcesUHC extends JavaPlugin {
     public static final AcesUHC getInstance() {
         return instance;
     }
-
 
     public final String getPath() {
         return path;
@@ -66,6 +68,11 @@ public class AcesUHC extends JavaPlugin {
 
     public GameModel getGameModel() {
         return gameModel;
+    }
+
+
+    private final void registerCommands() {
+        getCommand("ace").setExecutor(new CommandHandler());
     }
 
 }
