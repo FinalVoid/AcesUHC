@@ -7,12 +7,14 @@ public class GameModel {
 
     public String gameName;
     public String host;
+    public boolean randomTeams;
     public Map<String, String> roles;
-    public List<TeamModel> teamModelList;
+    public Map<String, String> teamModelList;
 
-    public GameModel(String gameName, String host, Map<String, String> roles, List<TeamModel> teamModelList) {
+    public GameModel(String gameName, String host, boolean randomTeams, Map<String, String> roles, Map<String, String> teamModelList) {
         this.gameName = gameName;
         this.host = host;
+        this.randomTeams = randomTeams;
         this.roles = roles;
         this.teamModelList = teamModelList;
     }
