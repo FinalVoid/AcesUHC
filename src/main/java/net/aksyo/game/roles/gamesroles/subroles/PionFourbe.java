@@ -1,6 +1,7 @@
 package net.aksyo.game.roles.gamesroles.subroles;
 
 import net.aksyo.AcesUHC;
+import net.aksyo.game.roles.RoleType;
 import net.aksyo.game.roles.SubRole;
 import net.aksyo.player.AcePlayer;
 
@@ -19,6 +20,11 @@ public class PionFourbe extends SubRole {
     @Override
     public String getDescription() {
         return null;
+    }
+
+    @Override
+    public RoleType getParentRole() {
+        return RoleType.PION;
     }
 
     @Override

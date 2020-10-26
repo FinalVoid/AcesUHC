@@ -9,13 +9,13 @@ public enum SubRoleType {
     NULL(null),
     PIONFOURBE(PionFourbe::new);
 
-    private Supplier<SubRole> subRole;
+    private Supplier<SubRole> factory;
 
-    SubRoleType(Supplier<SubRole> subRole) {
-        this.subRole = subRole;
+    SubRoleType(Supplier<SubRole> factory) {
+        this.factory = factory;
     }
 
     public SubRole get() {
-        return subRole.get();
+        return factory.get();
     }
 }

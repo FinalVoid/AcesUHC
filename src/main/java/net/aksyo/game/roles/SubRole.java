@@ -10,6 +10,8 @@ public abstract class SubRole {
 
     public abstract String getDescription();
 
+    public abstract RoleType getParentRole();
+
     public abstract void revealAction(AcePlayer player);
 
 }
