@@ -1,80 +1,74 @@
 package net.aksyo.game.managers;
 
+import com.google.gson.internal.$Gson$Preconditions;
 import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.RoleType;
-import net.aksyo.game.roles.Team;
+import net.aksyo.game.roles.ITeam;
 import net.aksyo.game.roles.gamesroles.subroles.SubRoleType;
 import net.aksyo.game.teams.*;
 import net.aksyo.player.AcePlayer;
+import net.aksyo.player.PlayerOption;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class TeamManager {
 
-    private Map<Team, HashSet<AcePlayer>> TEAMS = new HashMap<>();
+    private Map<ITeam, HashSet<AcePlayer>> TEAMS = new HashMap<>();
     private LinkedList<AcePlayer> deadPlayers = new LinkedList<>();
 
     public TeamManager() {
-        TEAMS.put(PiquesTeam.getInstance(), new HashSet<>());
-        TEAMS.put(TrefleTeam.getInstance(), new HashSet<>());
-        TEAMS.put(CarreauxTeam.getInstance(), new HashSet<>());
-        TEAMS.put(CoeurTeam.getInstance(), new HashSet<>());
-        TEAMS.put(JokerTeam.getInstance(), new HashSet<>());
+        TEAMS.put(PiquesTeam.getInstance(), new HashSet<AcePlayer>());
+        TEAMS.put(TrefleTeam.getInstance(), new HashSet<AcePlayer>());
+        TEAMS.put(CarreauxTeam.getInstance(), new HashSet<AcePlayer>());
+        TEAMS.put(CoeurTeam.getInstance(), new HashSet<AcePlayer>());
+        TEAMS.put(JokerTeam.getInstance(), new HashSet<AcePlayer>());
     }
 
-    public AcePlayer[] getAcePlayers() {
-        int count = TEAMS.values().stream().mapToInt(HashSet::size).sum();
+    public boolean setTeam(Player player, ITeam team, RoleType roleType, SubRoleType subRoleType) {
+        return TEAMS.get(team).add(new AcePlayer(player, team, roleType, subRoleType));
+    }
 
-        AcePlayer[] players = new AcePlayer[count];
+    public Set<AcePlayer> getAcePlayers() {
 
+        Set<AcePlayer> set = new HashSet<>();
+
+        for (HashSet<AcePlayer> t : TEAMS.values()) {
+            set.addAll(t);
+        }
+
+        return set;
+    }
+
+    public ITeam[] getTeams() {
+        ITeam[] teams = new ITeam[TEAMS.keySet().size()];
         int j = 0;
+        for (ITeam ITeam : TEAMS.keySet()) {
+            teams[j] = ITeam;
+            j++;
+        }
 
-        for(Map.Entry<Team, HashSet<AcePlayer>> entry : TEAMS.entrySet()) {
-            for(AcePlayer p : entry.getValue()) {
-                players[j] = p;
-                j++;
+        return teams;
+    }
+
+    public AcePlayer getAcePlayer(Player player) {
+        for(Set<AcePlayer> list : TEAMS.values()) {
+            Optional<AcePlayer> optional = list.stream().filter(acePlayer -> acePlayer.getPlayer().getUniqueId().compareTo(player.getUniqueId()) == 0).findFirst();
+            if(optional.isPresent()) {
+                return optional.get();
             }
         }
-
-        return players;
+        return null;
     }
 
-    public Team[] getTeams() {
-        Team[] teams = new Team[TEAMS.keySet().size()];
-
-        int j = 0;
-
-        for (Team team : TEAMS.keySet()) {
-            teams[j] = team;
-            j++;
-        }
-
-        return teams;
+    public Set<AcePlayer> getTeamMembers(ITeam team) {
+        return TEAMS.get(team);
     }
 
-    /**
-     *
-     * @return An array of the principal teams (Piques, Trefle, Carreaux, Coeur)
-     */
-    public Team[] getPrincipalTeams() {
-        Set<Team> teamSet = TEAMS.keySet();
-        teamSet.remove(JokerTeam.getInstance());
-        Team[] teams = new Team[teamSet.size()];
-
-        int j = 0;
-
-        for (Team team : teamSet) {
-            teams[j] = team;
-            j++;
-        }
-
-        return teams;
-    }
-
-    public void setTeam(Player player, Team team, RoleType roleType, SubRoleType subRoleType) {
-        TEAMS.get(team).add(new AcePlayer(player, team, roleType, subRoleType));
+    public boolean killPlayer(AcePlayer player) {
+        return deadPlayers.add(player);
     }
 
     public boolean isPlayerDead(AcePlayer player) {
@@ -86,36 +80,122 @@ public class TeamManager {
         return deadPlayers.remove(player);
     }
 
-    public void distribute(List<Player> players) {
+    public LinkedList<AcePlayer> getDeadPlayers() {
+        return deadPlayers;
+    }
+
+    public boolean distribute(List<Player> players) {
 
         if ((players.size() - 1) % 4 == 0) {
 
+            System.out.println("Distributing Roles!");
+
+            final int times = (players.size() - 1) / 4;
+            System.out.println("Times : " + times);
+
             int randomJoker = randomValue(players.size());
             setTeam(players.get(randomJoker), JokerTeam.getInstance(), RoleType.JOKER, SubRoleType.NULL);
+            System.out.println("Joker set to " + players.get(randomJoker).getName() + " Random Value : " + randomJoker + " List Size : " + players.size());
             players.remove(randomJoker);
+            System.out.println("New Size : " + getAcePlayers().size());
 
-            for (Team team : AcesUHC.getInstance().getTeamManager().getPrincipalTeams()) {
+            for (ITeam ITeam : AcesUHC.getInstance().getTeamManager().getTeams()) {
+
+                if (ITeam instanceof JokerTeam) {
+                    continue;
+                }
+
                 boolean isAsSet = false, isPionFourbeSet = false;
-                for (int i = 0; i < players.size() / 4; i++) {
+                System.out.println("Team : " + ITeam.getName());
+                for (int i = 0; i < times; i++) {
                     int playerIndex = randomValue(players.size());
+                    System.out.println("As Set : " + (isAsSet ? "YES" : "NO") + " PionFourbe : " + (isPionFourbeSet ? "YES" : "NO"));
                     if (!isAsSet) {
-                        setTeam(players.get(playerIndex), team, RoleType.AS, SubRoleType.NULL);
+                        setTeam(players.get(playerIndex), ITeam, RoleType.AS, SubRoleType.NULL);
+                        System.out.println("As set to " + players.get(playerIndex).getName() + " Random Value : " + playerIndex + " List Size : " + players.size());
                         players.remove(playerIndex);
+                        System.out.println("New Size : " + getAcePlayers().size());
                         isAsSet = true;
                         continue;
                     } else if (!isPionFourbeSet) {
-                        setTeam(players.get(playerIndex), team, RoleType.PION, SubRoleType.PIONFOURBE);
+                        setTeam(players.get(playerIndex), ITeam, RoleType.PION, SubRoleType.PIONFOURBE);
+                        System.out.println("Fourbe set to " + players.get(playerIndex).getName() + " Random Value : " + playerIndex + " List Size : " + players.size());
                         players.remove(playerIndex);
+                        System.out.println("New Size : " + getAcePlayers().size());
                         isPionFourbeSet = true;
                         continue;
                     }
-                    setTeam(players.get(playerIndex), team, RoleType.PION, SubRoleType.NULL);
+                    setTeam(players.get(playerIndex), ITeam, RoleType.PION, SubRoleType.NULL);
+                    System.out.println("Pion set to " + players.get(playerIndex).getName() + " Random Value : " + playerIndex + " List Size : " + players.size());
                     players.remove(playerIndex);
+                    System.out.println("New Size : " + getAcePlayers().size());
                 }
             }
+            return true;
+        }
 
-        } else {
-            System.out.println("Cannot distribute roles");
+        System.out.println("Cannot distribute roles");
+        return false;
+
+
+    }
+
+    public AcePlayer getTeamAsPlayer(ITeam team) {
+
+        if (team instanceof JokerTeam) {
+            System.out.println("Cannot check for Joker Team");
+            return null;
+        }
+
+        for (AcePlayer acePlayer : TEAMS.get(team)) {
+            if (acePlayer.getRoleType() == RoleType.AS) {
+                return acePlayer;
+            }
+        }
+
+        return null;
+
+    }
+
+    public boolean isAsAlive(ITeam team) {
+
+        if (team instanceof JokerTeam) {
+            System.out.println("Cannot check for Joker Team");
+            return true;
+        }
+
+        for (AcePlayer acePlayer : TEAMS.get(team)) {
+            if (acePlayer.getRoleType() == RoleType.AS) {
+                if (acePlayer.isOption(PlayerOption.PLAYER)) return true;
+            }
+        }
+        return false;
+    }
+
+    public void revealRoles() {
+
+
+        for (AcePlayer acePlayer : getAcePlayers()) {
+            Player player = acePlayer.getPlayer();
+
+            player.playSound(player.getLocation(), Sound.PORTAL_TRAVEL, 1, 1.5f);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.sendMessage(" ");
+                    player.sendMessage("                         §3§l Révèlation des Roles - " + acePlayer.getTeam().getGameName());
+                    player.sendMessage(" ");
+                    player.sendMessage(AcesUHC.prefix + "§eVotre role est : §3§l" + (acePlayer.hasSubRole() ? acePlayer.getSubRoleType().get().getName() : acePlayer.getRoleType().get().getName()));
+                    if (acePlayer.getRoleType() != RoleType.JOKER) {
+                        player.sendMessage("     §5§l-  §r§6L'As de votre equipe est : §e" + getTeamAsPlayer(acePlayer.getTeam()).getPlayer().getName());
+                    }
+                    player.sendMessage("     §5§l-  §r§9" + (acePlayer.hasSubRole() ? acePlayer.getSubRoleType().get().getDescription() : acePlayer.getRoleType().get().getDescription()));
+                    player.sendMessage(" ");
+                    player.sendMessage(AcesUHC.prefix + "§2Tape §b/a role §2pour avoir plus d'information.");
+                }
+            }.runTaskLater(AcesUHC.getInstance(), 45);
+
         }
 
     }
@@ -124,6 +204,20 @@ public class TeamManager {
 
         return new Random().nextInt(bound);
 
+    }
+
+    protected void playRevealSound(Player player) {
+
+        for (int i = 0; i < 2; i++) {
+            final float volume = 0.5f + i * 0.2f;
+            final int ticks = i * 4;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.playSound(player.getLocation(), Sound.PORTAL_TRAVEL, 1, volume);
+                }
+            }.runTaskLater(AcesUHC.getInstance(), ticks);
+        }
     }
 
 

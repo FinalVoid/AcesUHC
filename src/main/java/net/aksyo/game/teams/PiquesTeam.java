@@ -1,16 +1,10 @@
 package net.aksyo.game.teams;
 
-import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.GameRole;
 import net.aksyo.game.roles.RoleType;
-import net.aksyo.game.roles.SubRole;
-import net.aksyo.game.roles.Team;
-import net.aksyo.game.roles.gamesroles.subroles.SubRoleType;
+import net.aksyo.game.roles.ITeam;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class PiquesTeam implements Team {
+public class PiquesTeam implements ITeam {
 
     private static PiquesTeam instance = new PiquesTeam();
 
@@ -25,7 +19,7 @@ public class PiquesTeam implements Team {
 
     @Override
     public String getGameName() {
-        return AcesUHC.getInstance().getGameModel().teamModelList.get(getName());
+        return "§7Piques";
     }
 
     @Override

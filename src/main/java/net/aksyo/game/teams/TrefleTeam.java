@@ -1,16 +1,10 @@
 package net.aksyo.game.teams;
 
-import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.GameRole;
 import net.aksyo.game.roles.RoleType;
-import net.aksyo.game.roles.SubRole;
-import net.aksyo.game.roles.Team;
-import net.aksyo.game.roles.gamesroles.subroles.SubRoleType;
+import net.aksyo.game.roles.ITeam;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class TrefleTeam implements Team {
+public class TrefleTeam implements ITeam {
 
     private static TrefleTeam instance = new TrefleTeam();
 
@@ -20,12 +14,12 @@ public class TrefleTeam implements Team {
 
     @Override
     public String getName() {
-        return "trefle";
+        return "trefles";
     }
 
     @Override
     public String getGameName() {
-        return AcesUHC.getInstance().getGameModel().teamModelList.get(getName());
+        return "§7Trefles";
     }
 
     @Override

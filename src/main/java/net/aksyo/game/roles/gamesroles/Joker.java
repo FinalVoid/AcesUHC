@@ -2,7 +2,6 @@ package net.aksyo.game.roles.gamesroles;
 
 import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.GameRole;
-import net.aksyo.game.roles.Team;
 
 public class Joker extends GameRole {
 
@@ -19,7 +18,15 @@ public class Joker extends GameRole {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Vous etes seul contre tous. Mais un certain pacte permettera de rompre la solitude.";
+    }
+
+    @Override
+    public String[] getInformation() {
+        return new String[] {
+                "Votre but est de gagner seul. Cependant vous recevez les requetes des Pion Fourbe qui veulent passer un pacte avec vous.",
+                "§cPas encore determiner"
+        };
     }
 
     @Override

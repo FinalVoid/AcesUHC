@@ -1,6 +1,9 @@
 package net.aksyo.game.managers;
 
 import net.aksyo.game.GameState;
+import org.bukkit.entity.Player;
+
+import java.util.LinkedList;
 
 public class GameManager {
 
@@ -10,6 +13,7 @@ public class GameManager {
     private boolean pvp = false;
     private boolean debug = false;
     private boolean movement = true;
+    private LinkedList<Player> immunePlayers = new LinkedList<>();
 
 
     public GameManager() {
@@ -110,6 +114,11 @@ public class GameManager {
      */
     public void setPvp(boolean pvp) { this.pvp = pvp; }
 
-
-
+    /**
+     *
+     * @return The list of immuned players
+     */
+    public LinkedList<Player> getImmunePlayers() {
+        return immunePlayers;
+    }
 }

@@ -6,6 +6,9 @@ import net.aksyo.game.managers.TeamManager;
 import net.aksyo.game.managers.WorldManager;
 import net.aksyo.json.FileManager;
 import net.aksyo.json.model.GameModel;
+import net.aksyo.listeners.PlayerDamageListener;
+import net.aksyo.listeners.PlayerDeathListener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -13,6 +16,11 @@ import java.io.IOException;
 public class AcesUHC extends JavaPlugin {
 
     private static AcesUHC instance;
+
+    private PluginManager pluginManager = getServer().getPluginManager();
+
+    public static String adminPrefix = "§c[ADMIN] ";
+    public static String prefix = "§a[§3Aces UHC§a] ";
 
     private GameManager gameManager;
     private TeamManager teamManager;
@@ -32,6 +40,7 @@ public class AcesUHC extends JavaPlugin {
         this.worldManager = new WorldManager();
 
         registerCommands();
+        registerEvents();
 
         try {
             gameModel = new FileManager(path).getGameModel();
@@ -73,6 +82,12 @@ public class AcesUHC extends JavaPlugin {
 
     private final void registerCommands() {
         getCommand("ace").setExecutor(new CommandHandler());
+    }
+
+    private final void registerEvents() {
+        pluginManager.registerEvents(new PlayerDeathListener(), this);
+        pluginManager.registerEvents(new PlayerDamageListener(), this);
+
     }
 
 }

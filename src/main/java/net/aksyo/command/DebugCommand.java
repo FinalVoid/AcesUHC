@@ -1,24 +1,27 @@
 package net.aksyo.command;
 
+import com.google.gson.internal.$Gson$Preconditions;
 import net.aksyo.AcesUHC;
 import net.aksyo.game.managers.TeamManager;
-import net.aksyo.game.roles.Team;
+import net.aksyo.game.roles.ITeam;
 import net.aksyo.player.AcePlayer;
 import net.aksyo.utils.GUI;
-import net.aksyo.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DebugCommand extends AceCommand {
 
     private TeamManager tManager = AcesUHC.getInstance().getTeamManager();
+    private String admin = AcesUHC.adminPrefix;
 
     public DebugCommand() {
         super("debug", "Active le debug", true);
@@ -29,7 +32,7 @@ public class DebugCommand extends AceCommand {
 
         if (args.length == 1) {
             if(AcesUHC.getInstance().getGameManager().isDebug()) return;
-            player.sendMessage("§bDebug is now activated!");
+            player.sendMessage(admin + "§bDebug is now activated!");
             AcesUHC.getInstance().getGameManager().activateDebug();
             return;
         }
@@ -43,11 +46,27 @@ public class DebugCommand extends AceCommand {
                     break;
 
                 case "teams":
+                    player.sendMessage(admin + "§aOuverture du GUI des equipes");
                     teamCheckGui(player);
                     break;
 
                 case "roles":
+                    player.sendMessage(admin + "§aOuverture du GUI des players");
                     roleGui(player);
+                    break;
+
+                case "reveal":
+                    revealMessages(player);
+                    break;
+
+                case "tmanager":
+                    player.sendMessage(admin + "§bCheck console please");
+                    checkTManager();
+                    break;
+
+                case "dead":
+                    player.sendMessage("§aOuverture du GUI des players §cMORTES (les nulos)");
+                    deadPlayersGUI(player);
                     break;
             }
 
@@ -56,18 +75,38 @@ public class DebugCommand extends AceCommand {
     }
 
     private void executeDistribution(Player player) {
-        player.sendMessage("§aDistribution faite!");
-        tManager.distribute(Bukkit.getOnlinePlayers().stream().collect(Collectors.toList()));
+        player.sendMessage(admin + "§aDistribution lancé!");
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                boolean executed = tManager.distribute(Bukkit.getOnlinePlayers().stream().collect(Collectors.toList()));
+                player.sendMessage(admin + (executed ? "§aDistribution terminé!" : "§cDistribution failed!"));
+
+            }
+        }.runTaskLater(AcesUHC.getInstance(), 40);
     }
 
     private void teamCheckGui(Player player) {
 
         GUI gui = new GUI(AcesUHC.getInstance(), "§2Teams", 1);
         int slot = 0;
+        ItemStack item = new ItemStack(Material.PAINTING);
+        ItemMeta meta = item.getItemMeta();
 
-        for (Team team : tManager.getTeams()) {
-            gui.setItem(slot, new ItemBuilder(Material.PAINTING).setName("Team").lore(" ",
-                    "§3Game Name : §r" + team.getGameName()).create(), (target, inventoryClickEvent) -> {});
+        for (ITeam iTeam : tManager.getTeams()) {
+            System.out.println(iTeam.getGameName());
+            List<String> lore = new ArrayList<>();
+            lore.add(" ");
+            lore.add("§3Game Name : " + iTeam.getGameName());
+            lore.add("§3Team Members :");
+            for (AcePlayer p : tManager.getTeamMembers(iTeam)) {
+                System.out.println(p.getPlayer().getName());
+                lore.add("§2" + p.getPlayer().getName() + " §8- §9" + (p.hasSubRole() ? p.getSubRoleType().get().getGameName() : p.getRoleType().get().getGameName()));
+            }
+            meta.setDisplayName("§3" + iTeam.getName());
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+            gui.setItem(slot, item, (target, inventoryClickEvent) -> {});
             slot += 2;
         }
 
@@ -81,20 +120,22 @@ public class DebugCommand extends AceCommand {
         GUI gui = new GUI(AcesUHC.getInstance(), "§2Roles", 8);
         int slot = 0;
 
-        ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
+        ItemStack item = new ItemStack(Material.DIAMOND);
+        ItemMeta meta = item.getItemMeta();
+
+        System.out.println(tManager.getAcePlayers().size());
 
         for (AcePlayer acePlayer : tManager.getAcePlayers()) {
-            meta.setOwner(acePlayer.getPlayer().getName());
-            gui.setItem(slot, new ItemBuilder(skull).setName("§3" + acePlayer.getPlayer().getDisplayName()).lore(
-                    " ",
+            meta.setDisplayName(acePlayer.getPlayer().getName());
+            meta.setLore(Arrays.asList(" ",
                     "§bTeam : §e" + acePlayer.getTeam().getName(),
-                    "§bRole : §e" + acePlayer.getRoleType().get().getName()
-            ).create(), (target, inventoryClickEvent) -> {
+                    "§bRole : §e" + (acePlayer.hasSubRole() ? acePlayer.getSubRoleType().get().getGameName() : acePlayer.getRoleType().get().getGameName())));
+            item.setItemMeta(meta);
+            gui.setItem(slot, item, (target, inventoryClickEvent) -> {
                 player.closeInventory();
                 player.sendMessage(" ");
                 player.sendMessage("§bTeam : §e" + acePlayer.getTeam().getName());
-                player.sendMessage("§bRole : §e" + acePlayer.getRoleType().get().getName());
+                player.sendMessage("§bRole : §e" + (acePlayer.hasSubRole() ? acePlayer.getSubRoleType().get().getGameName() : acePlayer.getRoleType().get().getGameName()));
 
             });
 
@@ -105,5 +146,49 @@ public class DebugCommand extends AceCommand {
         gui.setLocked(true);
         gui.open(player);
 
+    }
+
+    private void revealMessages(Player player) {
+        player.sendMessage(admin + "§bReveal des roles a tous le monde!");
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                tManager.revealRoles();
+            }
+        }.runTaskLater(AcesUHC.getInstance(), 40);
+    }
+
+    private void checkTManager() {
+
+        for (int i = 0; i < tManager.getTeams().length; i++) {
+            System.out.println(tManager.getTeams()[i].getGameName());
+        }
+
+    }
+
+    private void deadPlayersGUI(Player player) {
+        GUI gui = new GUI(AcesUHC.getInstance(), "§3Player Morts", 6);
+        int slot = 0;
+
+        ItemStack item = new ItemStack(Material.COAL);
+        ItemMeta meta = item.getItemMeta();
+
+        for (AcePlayer acePlayer : tManager.getDeadPlayers()) {
+            meta.setDisplayName(acePlayer.getPlayer().getName());
+            meta.setLore(Arrays.asList(" ",
+                    "§bTeam : §e" + acePlayer.getTeam().getName(),
+                    "§bRole : §e" + (acePlayer.hasSubRole() ? acePlayer.getSubRoleType().get().getGameName() : acePlayer.getRoleType().get().getGameName())));
+            item.setItemMeta(meta);
+            gui.setItem(slot, item, (target, inventoryClickEvent) -> {
+                player.closeInventory();
+                player.sendMessage("§c" + acePlayer.getPlayer().getName() + " est mort comme un nulos");
+
+            });
+
+            slot++;
+        }
+
+        gui.setLocked(true);
+        gui.open(player);
     }
 }

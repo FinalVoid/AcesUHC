@@ -9,6 +9,7 @@ public abstract class SubRole {
     public abstract String getGameName();
 
     public abstract String getDescription();
+    public abstract String[] getInformation();
 
     public abstract RoleType getParentRole();
 

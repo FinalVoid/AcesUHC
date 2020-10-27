@@ -19,7 +19,15 @@ public class PionFourbe extends SubRole {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Vous etes le Pion Fourbe. Vous pouvez faire un pacte avec le Joker, et trahir votre equipe.";
+    }
+
+    @Override
+    public String[] getInformation() {
+        return new String[] {
+                "Votre objectif n'est pas precis, si vous ne passez un pacte avec le Joker, vous devez gagner avec votre equipe.",
+                "§cPas encore determiner"
+        };
     }
 
     @Override
