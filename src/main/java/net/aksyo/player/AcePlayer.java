@@ -46,7 +46,7 @@ public class AcePlayer {
         return subRoleType;
     }
 
-    public boolean isOption(PlayerOption option) {
+    public boolean hasOption(PlayerOption option) {
         return option == this.option;
     }
 
