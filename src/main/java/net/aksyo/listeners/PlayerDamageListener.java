@@ -1,6 +1,7 @@
 package net.aksyo.listeners;
 
 import net.aksyo.AcesUHC;
+import net.aksyo.game.GameState;
 import net.aksyo.player.AcePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +12,11 @@ public class PlayerDamageListener implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
+
+        if (!AcesUHC.getInstance().getGameManager().isGameState(GameState.GAME) || !AcesUHC.getInstance().getGameManager().isDamage()) {
+            event.setCancelled(true);
+            return;
+        }
 
         if (event.getEntity() instanceof Player) {
 
