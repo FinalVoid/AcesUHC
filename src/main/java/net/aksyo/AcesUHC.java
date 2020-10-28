@@ -8,6 +8,7 @@ import net.aksyo.json.FileManager;
 import net.aksyo.json.model.GameModel;
 import net.aksyo.listeners.PlayerDamageListener;
 import net.aksyo.listeners.PlayerDeathListener;
+import net.aksyo.listeners.PlayerMoveListener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -87,6 +88,7 @@ public class AcesUHC extends JavaPlugin {
     private final void registerEvents() {
         pluginManager.registerEvents(new PlayerDeathListener(), this);
         pluginManager.registerEvents(new PlayerDamageListener(), this);
+        pluginManager.registerEvents(new PlayerMoveListener(), this);
 
     }
 
