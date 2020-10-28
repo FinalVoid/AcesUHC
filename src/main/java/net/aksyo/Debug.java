@@ -2,10 +2,13 @@ package net.aksyo;
 
 import net.aksyo.game.roles.ITeam;
 
+import java.util.Random;
+
 public class Debug {
 
     public static void main(String[] args) {
         //distribute(17);
+        System.out.println(new Random().nextInt(5));
     }
 
     public static void distribute(final int players) {
@@ -23,6 +26,7 @@ public class Debug {
 
                 }
             } */
+
 
         } else {
             System.out.println("Cannot distribute roles");
