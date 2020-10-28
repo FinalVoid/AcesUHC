@@ -13,6 +13,7 @@ public class GameManager {
     private boolean pvp = false;
     private boolean debug = false;
     private boolean movement = true;
+    private boolean jokerPacte = false;
     private LinkedList<Player> immunePlayers = new LinkedList<>();
 
 
@@ -113,6 +114,22 @@ public class GameManager {
      * @param pvp set if pvp is activated
      */
     public void setPvp(boolean pvp) { this.pvp = pvp; }
+
+    /**
+     *
+     * @return if the pion can do the pacte with the joker
+     */
+    public boolean isJokerPacte() {
+        return jokerPacte;
+    }
+
+    /**
+     *
+     * @param jokerPacte set if the pacte with joker is available
+     */
+    public void setJokerPacte(boolean jokerPacte) {
+        this.jokerPacte = jokerPacte;
+    }
 
     /**
      *

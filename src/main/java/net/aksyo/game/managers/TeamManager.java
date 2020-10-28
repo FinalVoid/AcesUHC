@@ -1,6 +1,5 @@
 package net.aksyo.game.managers;
 
-import com.google.gson.internal.$Gson$Preconditions;
 import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.RoleType;
 import net.aksyo.game.roles.ITeam;
@@ -8,8 +7,14 @@ import net.aksyo.game.roles.gamesroles.subroles.SubRoleType;
 import net.aksyo.game.teams.*;
 import net.aksyo.player.AcePlayer;
 import net.aksyo.player.PlayerOption;
+import net.aksyo.utils.BasicUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Sound;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -82,6 +87,20 @@ public class TeamManager {
 
     public LinkedList<AcePlayer> getDeadPlayers() {
         return deadPlayers;
+    }
+
+    public List<AcePlayer> getAlivePlayers() {
+
+        List<AcePlayer> alivePlayes = new ArrayList<>();
+
+        for (AcePlayer player : getAcePlayers()) {
+            if (!deadPlayers.contains(player)) {
+                alivePlayes.add(player);
+            }
+        }
+
+        return alivePlayes;
+
     }
 
     public boolean distribute(List<Player> players) {
@@ -166,7 +185,7 @@ public class TeamManager {
 
         for (AcePlayer acePlayer : TEAMS.get(team)) {
             if (acePlayer.getRoleType() == RoleType.AS) {
-                if (acePlayer.isOption(PlayerOption.PLAYER)) return true;
+                if (acePlayer.hasOption(PlayerOption.PLAYER)) return true;
             }
         }
         return false;
@@ -193,8 +212,56 @@ public class TeamManager {
                     player.sendMessage("     §5§l-  §r§9" + (acePlayer.hasSubRole() ? acePlayer.getSubRoleType().get().getDescription() : acePlayer.getRoleType().get().getDescription()));
                     player.sendMessage(" ");
                     player.sendMessage(AcesUHC.prefix + "§2Tape §b/a role §2pour avoir plus d'information.");
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (!acePlayer.hasSubRole()) {
+                                acePlayer.getRoleType().get().applyPowers().accept(acePlayer);
+                            }
+                        }
+                    }.runTaskLater(AcesUHC.getInstance(), 45);
                 }
             }.runTaskLater(AcesUHC.getInstance(), 45);
+
+        }
+
+    }
+
+    public void playVictory(ITeam team) {
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            playSound(player);
+        }
+
+        BasicUtils.silentBroadcast(" ");
+        BasicUtils.silentBroadcast("§aLa team des vainqueurs est : " + team.getGameName()); //TODO Most kills announcement
+        BasicUtils.silentBroadcast(" ");
+
+        for (AcePlayer acePlayer : getTeamMembers(team)) {
+
+            for (int i = 0; i < 5; i++) {
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        int r = new Random().nextInt(255), g = new Random().nextInt(255), b = new Random().nextInt(255);
+
+                        Firework f = (Firework) acePlayer.getPlayer().getWorld().spawn(acePlayer.getPlayer().getLocation(), Firework.class);
+
+                        FireworkMeta fm = f.getFireworkMeta();
+                        fm.addEffect(FireworkEffect.builder()
+                                .flicker(false)
+                                .trail(true)
+                                .with(FireworkEffect.Type.BALL_LARGE)
+                                .withColor(Color.fromRGB(r, g, b))
+                                .withFade(Color.WHITE)
+                                .build());
+                        fm.setPower(new Random().nextInt(3));
+                        f.setFireworkMeta(fm);
+
+                    }
+                }.runTaskLater(AcesUHC.getInstance(), 40);
+            }
 
         }
 
@@ -206,7 +273,7 @@ public class TeamManager {
 
     }
 
-    protected void playRevealSound(Player player) {
+    protected void playSound(Player player) {
 
         for (int i = 0; i < 2; i++) {
             final float volume = 0.5f + i * 0.2f;
