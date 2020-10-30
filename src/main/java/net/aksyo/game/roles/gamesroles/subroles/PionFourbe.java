@@ -25,10 +25,9 @@ public class PionFourbe extends SubRole {
     @Override
     public String[] getInformation() {
         return new String[] {
-                "Votre objectif est de gagner avec votre equipe. Vous pouvez passer un pacte avec le Joker, s'il accepte le pacte,",
-                "Vos coordonnées lui seront données, allez-vous prendre le risque de gagner 5 ♡, les perdre définitivement... ou de ne rien avoir ?",
-                "§cPas encore determiner"
-
+                "Votre objectif est de gagner avec votre équipe et aider votre As à retrouver ses pouvoirs. ",
+                "Pour cela, vous disposez d’un atout : celui de passer un pacte avec le Joker. Si vous décidez de passer le pacte, vous avez une chance de gagner 5 ♡ permanents ou la malchance de les perdre. Peut-être que vous n’obtiendrez rien du tout… Le choix vous appartient !\n",
+                "§c/a pacte §e- Pour passer le pacte"
         };
     }
 

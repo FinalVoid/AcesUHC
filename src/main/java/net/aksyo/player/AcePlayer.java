@@ -8,6 +8,7 @@ import net.aksyo.game.teams.JokerTeam;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
@@ -62,7 +63,16 @@ public class AcePlayer {
             AcesUHC.getInstance().getGameManager().getImmunePlayers().add(player);
             int x = new Random().nextInt(125), z = new Random().nextInt(125);
             player.teleport(new Location(player.getWorld(), x, 200, z));
-            return AcesUHC.getInstance().getTeamManager().revivePlayer(this);
+            player.setGameMode(GameMode.SURVIVAL);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (AcesUHC.getInstance().getGameManager().getImmunePlayers().contains(player)) {
+                        AcesUHC.getInstance().getGameManager().getImmunePlayers().remove(player);
+                    }
+                }
+            }.runTaskLater(AcesUHC.getInstance(), 100);
+            return AcesUHC.getInstance().getTeamManager().getDeadPlayers().remove(this);
         }
         return false;
     }

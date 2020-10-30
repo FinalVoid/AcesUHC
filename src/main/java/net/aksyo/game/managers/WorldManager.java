@@ -1,6 +1,7 @@
 package net.aksyo.game.managers;
 
 import net.aksyo.AcesUHC;
+import net.aksyo.utils.BasicUtils;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -28,11 +29,11 @@ public class WorldManager {
 
     public void teleportPlayers() {
 
-        List<Player> playersList = new ArrayList<>(Bukkit.getOnlinePlayers());
+        List<Player> playersList = BasicUtils.getGameStartingPlayers(GameMode.ADVENTURE);
 
         for (double angle = 0, inc = 360 / playersList.size(); angle < 360; angle += inc) {
-            double x = Math.sin(angle) * (width - 3);
-            double z = Math.cos(angle) * (width - 3);
+            double x = Math.sin(angle) * (width - 4);
+            double z = Math.cos(angle) * (width - 4);
             if (playersList.size() > 0) {
                 System.out.println(center.getX() + " " + center.getY());
                 Cage cage = new Cage(center.clone().add(x, 3, z));

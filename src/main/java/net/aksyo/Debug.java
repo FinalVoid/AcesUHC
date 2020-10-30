@@ -8,7 +8,8 @@ public class Debug {
 
     public static void main(String[] args) {
         //distribute(17);
-        System.out.println(new Random().nextInt(5));
+        String test = "Wesh les reys";
+        System.out.println(test.toCharArray()[0]);
     }
 
     public static void distribute(final int players) {

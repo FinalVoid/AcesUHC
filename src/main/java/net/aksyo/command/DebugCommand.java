@@ -80,7 +80,7 @@ public class DebugCommand extends AceCommand {
                     RoleType roleType = tManager.getRoleByName(args[4]);
                     String str = args[4];
                     tManager.setTeam(Bukkit.getPlayer(args[2]), team, roleType, (args[5].equalsIgnoreCase("pion") ? SubRoleType.PIONFOURBE : SubRoleType.NULL));
-                    player.sendMessage(admin + "§bSet §9" + args[2] + "§b to §3" + team.getName() + "§b role : §3" + roleType.get() + "§b requested : §3" + str);
+                    player.sendMessage(admin + "§bSet §9" + args[2] + "§b to §3" + team.getName() + "§b role : §3" + roleType.get().getGameName() + "§b requested : §3" + str);
                     break;
 
                 case "pacte":
@@ -88,12 +88,18 @@ public class DebugCommand extends AceCommand {
                     break;
 
                 case "main":
-                    new MainGameTask(60, 60, 60, 60, 60, 60, 20).runTaskTimer(AcesUHC.getInstance(), 0, 20);
+                    new MainGameTask(3, 1.5, 6, 60, 1, 1, 20).runTaskTimer(AcesUHC.getInstance(), 0, 20);
                     break;
 
                 case "start":
                     player.sendMessage(admin + "§bStarting game with option : §e" + GameMode.valueOf(args[4]));
                    new StartGameTask(Integer.parseInt(args[2]), Integer.parseInt(args[3]), GameMode.valueOf(args[4].toUpperCase())).runTaskTimer(AcesUHC.getInstance(), 0, 20);
+                   break;
+
+                case "whisper":
+                    executeWhisper(Integer.parseInt(args[2]));
+                    player.sendMessage(admin + "§bExecuted Whispers.");
+                    break;
             }
         }
 
@@ -215,5 +221,12 @@ public class DebugCommand extends AceCommand {
 
         gui.setLocked(true);
         gui.open(player);
+    }
+
+    private void executeWhisper(int t) {
+
+        tManager.spawnChests();
+        tManager.whisper(t);
+
     }
 }

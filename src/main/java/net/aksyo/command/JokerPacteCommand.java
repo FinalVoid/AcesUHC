@@ -35,7 +35,7 @@ public class JokerPacteCommand extends AceCommand {
                     return;
                 }
 
-                if (gManager.isJokerPacte()) {
+                if (gManager.isJokerPacte() || !tManager.getPactePlayers().contains(acePlayer)) {
 
                     tManager.getPactePlayers().add(acePlayer);
                     tManager.applyJokerPacte(acePlayer);
@@ -43,7 +43,7 @@ public class JokerPacteCommand extends AceCommand {
                     System.out.println("Joker pacte " + player.getName());
 
                 } else {
-                    player.sendMessage(prefix + "§cVous ne pouvez pas passer le pacte du Joker car " + (MainGameTask.index < 1200 ? "§cl'ouverture des propositions se fait a 20 minutes de jeux" : "§cquelqu'un a deja passer le pacte"));
+                    player.sendMessage(prefix + "§cVous ne pouvez pas passer le pacte du Joker car " + (MainGameTask.index < 1200 ? "§cl'ouverture des propositions se fait a 20 minutes de jeux" : "§cvous avez deja passer le pacte"));
                 }
 
             } else {

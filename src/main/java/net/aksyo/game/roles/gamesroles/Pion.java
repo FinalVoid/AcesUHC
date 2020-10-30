@@ -34,8 +34,9 @@ public class Pion extends GameRole {
     @Override
     public String[] getInformation() {
         return new String[] {
-                "§aVotre objectif est de gagner avec otre equipe et proteger l'As ainsi que de l'aider dans la traque de des pouvoirs.",
-                "N'oubliez pas que l'un d'entre vous est fourbe!"
+                "§9Votre objectif est de gagner avec votre équipe et aider votre As à retrouver ses pouvoirs. ",
+                "§9Tant que votre As sera en vie, vous aurez la possibilité de revivre à l’infini dans un rayon de 150 blocs autour du centre.",
+                "§9Cependant, lors de la première réapparition, vous n’aurez plus que 8 cœurs puis 5 cœurs permanents pour les réapparitions suivantes."
         };
     }
 
@@ -69,6 +70,7 @@ public class Pion extends GameRole {
                     break;
                 case 3:
                     player.setFoodLevel(100);
+
                     player.sendMessage(prefix + "§aTes pouvoirs de Pions se sont activés. Tu as desormais \n§cSaturation Illimité");
                     break;
 

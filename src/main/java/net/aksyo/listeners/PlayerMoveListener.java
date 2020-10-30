@@ -15,7 +15,7 @@ public class PlayerMoveListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if (!AcesUHC.getInstance().getGameManager().isMovement() && !player.isOp()) {
+        if (!AcesUHC.getInstance().getGameManager().isMovement()) {
             player.teleport(event.getFrom());
         }
 

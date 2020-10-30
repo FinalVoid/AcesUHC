@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.function.Consumer;
 
@@ -25,20 +27,22 @@ public class Joker extends GameRole {
 
     @Override
     public String getDescription() {
-        return "Vous etes seul contre tous. Mais un certain pacte permettera de rompre la solitude.";
+        return "Vous etes le Joker, vous etes seul tant qu'aucun As a retrouvé ses pouvoir.";
     }
 
     @Override
     public String[] getInformation() {
         return new String[] {
-                "Votre but est de gagner seul. Cependant vous recevez les requetes des Pion Fourbe qui veulent passer un pacte avec vous.",
-                "§cPas encore determiner"
+                "§9Votre objectif est de gagner en solitaire tant que vous n’avez pas de camp. Pour cela, vous disposez de l’effet Résistance 1 ainsi que d’un livre power 2 punch 1.",
+                "§9Dès que l’As d’une équipe retrouvera ses pouvoirs, vous serez intégré directement à cette dernière et perdrez votre effet de résistance.",
+                "§9De plus, vous disposez d’un avantage : en passant des pactes avec les Pions fourbes, leurs coordonnées vous seront dévoilées. Faites-en bon usage…"
         };
     }
 
     @Override
     public Consumer<AcePlayer> applyPowers() {
         return acePlayer -> {
+            acePlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 24000, 1));
             ItemStack item = new ItemStack(Material.BOOK);
             ItemMeta meta = item.getItemMeta();
             meta.addEnchant(Enchantment.ARROW_DAMAGE, 2, true);

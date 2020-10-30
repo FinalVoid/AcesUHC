@@ -55,7 +55,7 @@ public class ChestManager {
 
         ItemStack item = new ItemStack(Material.BANNER);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(team.getGameName() + "§9 - Pouvoir de l'As");
+        meta.setDisplayName(team.getName() + "§9 - Pouvoir de l'As");
         meta.setLore(Arrays.asList(" ", "§7Clicker sur l'item pour activer votre pouvoir"));
         item.setItemMeta(meta);
 

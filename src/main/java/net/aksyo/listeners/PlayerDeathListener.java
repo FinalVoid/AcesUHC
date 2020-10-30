@@ -10,6 +10,7 @@ import net.aksyo.player.AcePlayer;
 import net.aksyo.player.PlayerOption;
 import net.aksyo.utils.BasicUtils;
 import net.aksyo.utils.Pair;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,7 +48,7 @@ public class PlayerDeathListener implements Listener {
 
                 if (tManager.isAsAlive(acePlayer.getTeam()) && !possibleVictory.getRight()) {
                     if (!acePlayer.hasSubRole()) {
-                        respawnPion(acePlayer);
+                       // respawnPion(acePlayer);
                     }
                     return;
                 }
@@ -63,12 +64,13 @@ public class PlayerDeathListener implements Listener {
         Player player = acePlayer.getPlayer();
         player.getPlayer().sendMessage(AcesUHC.prefix + "§aVous allez respawn dans 1 minutes!");
         new BukkitRunnable() {
+
             @Override
             public void run() {
                 acePlayer.revive();
                 switch ((int) player.getHealthScale()) {
                     case 20 :
-                        player.setHealthScale(14);
+                        player.setHealthScale(16);
                         break;
                     case 14:
                         player.setHealthScale(10);

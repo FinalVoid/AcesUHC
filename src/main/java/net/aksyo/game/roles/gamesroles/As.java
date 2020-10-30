@@ -34,17 +34,19 @@ public class As extends GameRole {
     @Override
     public String[] getInformation() {
         return new String[] {
-                "§bVotre objectif est survivre, et de retrouver vos pouvoirs qui sont enfouis dans un coffre caché.",
-                "§e/a pouvoir §6- §6Cela te permet de voir les coordonnees brouillés du coffre"
+                "§9Votre objectif est de retrouver vos pouvoirs et gagner avec votre équipe.",
+                "§9Toutes les 15 minutes, à partir de 30 minutes de jeu, un whisper vous révélera au fur et à mesure les coordonnées du coffre contenant vos pouvoirs.",
+                "§9Si vous retrouvez vos pouvoirs, vous disposerez de l’effet Résistance 1, Vitesse 1 et Résistance au feu permanent."
         };
     }
 
     @Override
     public Consumer<AcePlayer> applyPowers() {
         return acePlayer -> {
-            acePlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 24000, 1));
-            acePlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 24000, 1));
-            acePlayer.getPlayer().sendMessage(AcesUHC.prefix + "§aTes pouvoirs de Joker se sont activés. Tu as possède desormais un livre §cFire Resistance 1 et Speed 1");
+            acePlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 24000, 0));
+            acePlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 24000, 0));
+            acePlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 24000, 0));
+            acePlayer.getPlayer().sendMessage(AcesUHC.prefix + "§aTes pouvoirs d'As se sont activés. Tu as possède desormais un livre §cFire Resistance 1, Speed 1 et Resistance 1");
         };
     }
 

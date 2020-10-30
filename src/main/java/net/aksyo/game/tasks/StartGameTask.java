@@ -54,12 +54,12 @@ public class StartGameTask extends BukkitRunnable {
 
             if(index == 1) {
 
-                acesUHC.getWorldManager().initializeMap(new Location(acesUHC.getInstance().getWorldManager().world, -93, 113, 68), 300); //TODO Put back 0 0 0
+                acesUHC.getWorldManager().initializeMap(new Location(acesUHC.getInstance().getWorldManager().world, 0, 0, 0), 1800); //TODO Put back 0 0 0
                 acesUHC.getWorldManager().teleportPlayers();
                 acesUHC.getWorldManager().createWorldBorder(acesUHC.getInstance().getServer().getWorlds().get(0));
                 gManager.setMovement(false);
                 BasicUtils.getGameStartingPlayers(option).forEach(p -> p.setGameMode(GameMode.SURVIVAL));
-                acesUHC.getTeamManager().distribute(BasicUtils.getGameStartingPlayers(option));
+                acesUHC.getTeamManager().distribute(BasicUtils.getGameStartingPlayers(GameMode.SURVIVAL));
 
                 getReleaseTask().runTaskTimer(acesUHC, 20 ,20);
 
@@ -87,7 +87,7 @@ public class StartGameTask extends BukkitRunnable {
                     gManager.setMovement(true);
                     acesUHC.getWorldManager().removeCages();
 
-                    new MainGameTask(30, 15, 60, 20, 0, 20, 1).runTaskTimer(acesUHC, 0, 20);
+                    new MainGameTask(30, 15, 60, 20, 0.5, 20, 1).runTaskTimer(acesUHC, 0, 20);
 
                     AcesUHC.getInstance().getTeamManager().spawnChests();
 
@@ -97,7 +97,7 @@ public class StartGameTask extends BukkitRunnable {
                 }
 
                 if(index <= 3 && index != 0) {
-                    BasicUtils.silentBroadcast("§6" + index);
+                    BasicUtils.silentBroadcast("§6Liberation dans : " + index);
                 }
 
                 index--;

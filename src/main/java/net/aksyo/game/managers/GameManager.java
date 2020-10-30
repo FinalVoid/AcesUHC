@@ -40,6 +40,14 @@ public class GameManager {
     }
 
     /**
+     *
+     * @return The current game state
+     */
+    public GameState getCurrentGameState() {
+        return currentGameState;
+    }
+
+    /**
      * Freezes the current game
      * @param optionalFreeze if the freeze is optional or was forced
      */

@@ -1,9 +1,11 @@
 package net.aksyo.game.managers;
 
 import com.google.gson.internal.$Gson$Preconditions;
+import com.sun.media.jfxmediaimpl.HostUtils;
 import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.RoleType;
 import net.aksyo.game.roles.ITeam;
+import net.aksyo.game.roles.gamesroles.Joker;
 import net.aksyo.game.roles.gamesroles.subroles.SubRoleType;
 import net.aksyo.game.teams.*;
 import net.aksyo.player.AcePlayer;
@@ -20,6 +22,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TeamManager {
 
@@ -27,6 +30,7 @@ public class TeamManager {
     private Map<ITeam, Chest> CHESTS = new HashMap<>();
     private LinkedList<AcePlayer> deadPlayers = new LinkedList<>();
     private HashSet<AcePlayer> pactePlayers = new HashSet<>();
+    private boolean jokerChange = false;
 
     public TeamManager() {
         TEAMS.put(PiquesTeam.getInstance(), new HashSet<AcePlayer>());
@@ -96,11 +100,6 @@ public class TeamManager {
 
     public boolean isPlayerDead(AcePlayer player) {
         return deadPlayers.contains(player);
-    }
-
-    public boolean revivePlayer(AcePlayer player) {
-        player.revive();
-        return deadPlayers.remove(player);
     }
 
     public LinkedList<AcePlayer> getDeadPlayers() {
@@ -233,7 +232,7 @@ public class TeamManager {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (!acePlayer.hasSubRole()) {
+                            if (!acePlayer.hasSubRole() && acePlayer.getRoleType() != RoleType.AS) {
                                 acePlayer.getRoleType().get().applyPowers().accept(acePlayer);
                             }
                         }
@@ -257,14 +256,105 @@ public class TeamManager {
 
     }
 
+    /*public void whisper(int currentWhisper, double whispers) {
+
+        DecimalFormat df = new DecimalFormat("###.###");
+
+        for (ITeam team : getTeams()) {
+
+            if (team instanceof JokerTeam) continue;
+            if (TEAMS.get(team).size() == 0) continue;
+
+            Location chest = CHESTS.get(team).getLocation();
+            String line = "§d§lWHISPER §e> §r§bX : §c" + df.format(chest.getX()) + " §bY : §c" + df.format(chest.getY()) + " §bZ : §c" + df.format(chest.getZ());
+            String whisper = "";
+
+            for (char c : line.toCharArray()) {
+                if (Character.isDigit(c)) {
+                    System.out.println("Current whisper : " + currentWhisper + " Whispers : " + whispers);
+                    System.out.println("Bound is : " + ((whispers * 2) - currentWhisper));
+                    int r = new Random().nextInt((int) (whispers * 2) - currentWhisper);
+                    System.out.println("R Value : " + r);
+                    if (r != 0) {
+                        whisper += "§k" + c;
+                        continue;
+                    }
+                    whisper += c;
+                }
+                whisper += c;
+            }
+
+            System.out.println("Team : " + team.getName());
+            System.out.println("Whisper : " + whisper);
+            getTeamAsPlayer(team).getPlayer().sendMessage(whisper);
+
+        }
+
+    } */
+
+    public void whisper(int current) {
+
+        for (ITeam team : getTeams()) {
+
+            if (team instanceof JokerTeam) continue;
+            if (TEAMS.get(team).size() == 0) continue;
+
+            Location chestLocation = CHESTS.get(team).getLocation();
+            String x = String.valueOf(chestLocation.getX()), y = String.valueOf(chestLocation.getY()), z = String.valueOf(chestLocation.getZ());
+            String whisper = "§d§lWHISPER §e> §b";
+            String[] jam = {x, y, z};
+
+            System.out.println("X " + x + " Y " + y + " Z " + z);
+
+            for (String str : jam) {
+                char[] c = str.toCharArray();
+                System.out.println("Team : " + team.getName() + " Current : " + current + " Length : " + c.length);
+                if (current > c.length) {
+                    System.out.println("Current superior");
+                    whisper += str;
+                    continue;
+                }
+                for (int i = 0; i < c.length; i++) {
+                    if (i >= current) {
+                        whisper += "§k" + c[i];
+                    }
+                    whisper += c[i];
+                }
+                whisper += "§r §b";
+            }
+            System.out.println("Team : " + team.getName());
+            System.out.println("Whisper : " + whisper);
+            getTeamAsPlayer(team).getPlayer().sendMessage(whisper);
+
+        }
+
+    }
+
     public boolean checkChest(ITeam team, Block block) {
         return CHESTS.get(team).getLocation() == block.getLocation();
+    }
+
+    public void changeJokerTeam(ITeam team) {
+
+        if (!jokerChange) {
+            TEAMS.get(JokerTeam.getInstance()).forEach(p ->{
+                p.getPlayer().sendMessage(AcesUHC.prefix + team.getGameName() + "§a a trouvé le pouvoir de l'As, vous faites desormais partie de leur équipe.");
+            });
+            TEAMS.get(team).addAll(TEAMS.get(JokerTeam.getInstance()));
+            AtomicReference<String> jokers = new AtomicReference<>("");
+            TEAMS.get(JokerTeam.getInstance()).forEach(p -> jokers.set(jokers.get() + p.getPlayer().getName() + ", "));
+            TEAMS.get(team).forEach(p -> p.getPlayer().sendMessage(jokers.get() + " §aa rejoins votre equipe!"));
+            TEAMS.get(JokerTeam.getInstance()).clear();
+
+            jokerChange = true;
+        }
+
     }
 
     public void playVictory(ITeam team) {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            playSound(player);
+            playVictorySound(player);
         }
 
         BasicUtils.silentBroadcast(" ");
@@ -356,6 +446,10 @@ public class TeamManager {
                 }
             }.runTaskLater(AcesUHC.getInstance(), ticks);
         }
+    }
+
+    protected void playVictorySound(Player player) {
+        player.playSound(player.getLocation(), Sound.ENDERMAN_DEATH, 1f, 2f);
     }
 
 

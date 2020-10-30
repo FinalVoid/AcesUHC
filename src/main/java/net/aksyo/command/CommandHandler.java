@@ -11,7 +11,11 @@ public class CommandHandler implements CommandExecutor {
         new DebugCommand();
         new RoleCommand();
         new JokerPacteCommand();
-        //new FreezeGameCommand();
+        new FreezeGameCommand();
+        new BugCommand();
+        new SetGameModeCommand();
+        new SetFoodCommand();
+
     }
 
     @Override

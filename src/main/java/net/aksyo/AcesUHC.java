@@ -7,10 +7,11 @@ import net.aksyo.game.managers.TeamManager;
 import net.aksyo.game.managers.WorldManager;
 import net.aksyo.json.FileManager;
 import net.aksyo.json.model.GameModel;
-import net.aksyo.listeners.PlayerDamageListener;
-import net.aksyo.listeners.PlayerDeathListener;
-import net.aksyo.listeners.PlayerInteractListener;
-import net.aksyo.listeners.PlayerMoveListener;
+import net.aksyo.listeners.*;
+import net.aksyo.scoreboard.ScoreboardHandler;
+import net.aksyo.scoreboard.ScoreboardManager;
+import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,6 +30,7 @@ public class AcesUHC extends JavaPlugin {
     private TeamManager teamManager;
     private WorldManager worldManager;
     private ChestManager chestManager;
+    private ScoreboardManager scoreboardManager;
 
     private GameModel gameModel;
 
@@ -42,7 +44,9 @@ public class AcesUHC extends JavaPlugin {
         this.gameManager = new GameManager();
         this.teamManager = new TeamManager();
         this.worldManager = new WorldManager(getServer().getWorlds().get(0));
-        this.chestManager = new ChestManager(10);
+        this.chestManager = new ChestManager(250);
+        this.scoreboardManager = new ScoreboardManager(this, "§3ACES UHC");
+        scoreboardManager.runTaskTimerAsynchronously(this, 0, 20);
 
         registerCommands();
         registerEvents();
@@ -52,6 +56,11 @@ public class AcesUHC extends JavaPlugin {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+
+        worldManager.world.setGameRuleValue("keepInventory ", "true");
+        worldManager.world.setGameRuleValue("naturalRegeneration", "false");
+        worldManager.world.setDifficulty(Difficulty.EASY);
+
 
     }
 
@@ -98,6 +107,7 @@ public class AcesUHC extends JavaPlugin {
         pluginManager.registerEvents(new PlayerDamageListener(), this);
         pluginManager.registerEvents(new PlayerMoveListener(), this);
         pluginManager.registerEvents(new PlayerInteractListener(), this);
+        pluginManager.registerEvents(new ScenariosListener(), this);
 
     }
 
