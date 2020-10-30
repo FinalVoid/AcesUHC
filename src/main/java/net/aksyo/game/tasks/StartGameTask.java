@@ -3,9 +3,12 @@ package net.aksyo.game.tasks;
 import net.aksyo.AcesUHC;
 import net.aksyo.game.GameState;
 import net.aksyo.game.managers.GameManager;
+import net.aksyo.game.roles.ITeam;
+import net.aksyo.game.teams.JokerTeam;
 import net.aksyo.utils.BasicUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import sun.applet.Main;
 
@@ -33,15 +36,15 @@ public class StartGameTask extends BukkitRunnable {
 
         if (gManager.isGameState(GameState.FROZEN)) return;
 
-        if (startTime > 10) {
+        if (index >= 10) {
 
-            if (startTime % 10 == 0) {
-                BasicUtils.silentBroadcast(prefix + "§6La game commence dans §e" + index + "§ secondes");
+            if (index % 10 == 0) {
+                BasicUtils.silentBroadcast(prefix + "§6La game commence dans §e" + index + " §6secondes");
             }
 
         }
 
-        if (startTime <= 10) {
+        if (index <= 10) {
 
             if (BasicUtils.getGameStartingPlayers(option).size() < minimumPlayers) {
 
@@ -49,12 +52,13 @@ public class StartGameTask extends BukkitRunnable {
                 index = startTime;
             }
 
-            if(startTime == 1) {
+            if(index == 1) {
 
+                acesUHC.getWorldManager().initializeMap(new Location(acesUHC.getInstance().getWorldManager().world, -93, 113, 68), 300); //TODO Put back 0 0 0
                 acesUHC.getWorldManager().teleportPlayers();
-                acesUHC.getWorldManager().initializeMap(new Location(acesUHC.getInstance().getServer().getWorlds().get(0), 0, 0, 0), 1000);
                 acesUHC.getWorldManager().createWorldBorder(acesUHC.getInstance().getServer().getWorlds().get(0));
                 gManager.setMovement(false);
+                BasicUtils.getGameStartingPlayers(option).forEach(p -> p.setGameMode(GameMode.SURVIVAL));
                 acesUHC.getTeamManager().distribute(BasicUtils.getGameStartingPlayers(option));
 
                 getReleaseTask().runTaskTimer(acesUHC, 20 ,20);
@@ -64,7 +68,8 @@ public class StartGameTask extends BukkitRunnable {
 
         }
 
-        startTime--;
+        System.out.println("Start game task value : " + index);
+        index--;
 
     }
 
@@ -82,7 +87,11 @@ public class StartGameTask extends BukkitRunnable {
                     gManager.setMovement(true);
                     acesUHC.getWorldManager().removeCages();
 
-                    new MainGameTask(30, 15, 60, 20, 0, 20, 1).runTaskTimer(acesUHC, 20, 0);
+                    new MainGameTask(30, 15, 60, 20, 0, 20, 1).runTaskTimer(acesUHC, 0, 20);
+
+                    AcesUHC.getInstance().getTeamManager().spawnChests();
+
+                    gManager.setGameState(GameState.GAME);
 
                     cancel();
                 }

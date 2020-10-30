@@ -1,6 +1,7 @@
 package net.aksyo;
 
 import net.aksyo.command.CommandHandler;
+import net.aksyo.game.managers.ChestManager;
 import net.aksyo.game.managers.GameManager;
 import net.aksyo.game.managers.TeamManager;
 import net.aksyo.game.managers.WorldManager;
@@ -8,6 +9,7 @@ import net.aksyo.json.FileManager;
 import net.aksyo.json.model.GameModel;
 import net.aksyo.listeners.PlayerDamageListener;
 import net.aksyo.listeners.PlayerDeathListener;
+import net.aksyo.listeners.PlayerInteractListener;
 import net.aksyo.listeners.PlayerMoveListener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,6 +28,7 @@ public class AcesUHC extends JavaPlugin {
     private GameManager gameManager;
     private TeamManager teamManager;
     private WorldManager worldManager;
+    private ChestManager chestManager;
 
     private GameModel gameModel;
 
@@ -38,7 +41,8 @@ public class AcesUHC extends JavaPlugin {
 
         this.gameManager = new GameManager();
         this.teamManager = new TeamManager();
-        this.worldManager = new WorldManager();
+        this.worldManager = new WorldManager(getServer().getWorlds().get(0));
+        this.chestManager = new ChestManager(10);
 
         registerCommands();
         registerEvents();
@@ -76,6 +80,10 @@ public class AcesUHC extends JavaPlugin {
         return worldManager;
     }
 
+    public ChestManager getChestManager() {
+        return chestManager;
+    }
+
     public GameModel getGameModel() {
         return gameModel;
     }
@@ -89,6 +97,7 @@ public class AcesUHC extends JavaPlugin {
         pluginManager.registerEvents(new PlayerDeathListener(), this);
         pluginManager.registerEvents(new PlayerDamageListener(), this);
         pluginManager.registerEvents(new PlayerMoveListener(), this);
+        pluginManager.registerEvents(new PlayerInteractListener(), this);
 
     }
 

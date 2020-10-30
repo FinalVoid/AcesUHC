@@ -10,6 +10,7 @@ public class CommandHandler implements CommandExecutor {
     public CommandHandler() {
         new DebugCommand();
         new RoleCommand();
+        new JokerPacteCommand();
         //new FreezeGameCommand();
     }
 

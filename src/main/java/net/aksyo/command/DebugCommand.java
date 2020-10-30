@@ -4,15 +4,21 @@ import com.google.gson.internal.$Gson$Preconditions;
 import net.aksyo.AcesUHC;
 import net.aksyo.game.managers.TeamManager;
 import net.aksyo.game.roles.ITeam;
+import net.aksyo.game.roles.RoleType;
+import net.aksyo.game.roles.gamesroles.subroles.SubRoleType;
+import net.aksyo.game.tasks.MainGameTask;
+import net.aksyo.game.tasks.StartGameTask;
 import net.aksyo.player.AcePlayer;
 import net.aksyo.utils.GUI;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,8 +74,27 @@ public class DebugCommand extends AceCommand {
                     player.sendMessage("§aOuverture du GUI des players §cMORTES (les nulos)");
                     deadPlayersGUI(player);
                     break;
-            }
 
+                case "teamset":
+                    ITeam team = tManager.getTeamByName(args[3]);
+                    RoleType roleType = tManager.getRoleByName(args[4]);
+                    String str = args[4];
+                    tManager.setTeam(Bukkit.getPlayer(args[2]), team, roleType, (args[5].equalsIgnoreCase("pion") ? SubRoleType.PIONFOURBE : SubRoleType.NULL));
+                    player.sendMessage(admin + "§bSet §9" + args[2] + "§b to §3" + team.getName() + "§b role : §3" + roleType.get() + "§b requested : §3" + str);
+                    break;
+
+                case "pacte":
+                    AcesUHC.getInstance().getGameManager().setJokerPacte(true);
+                    break;
+
+                case "main":
+                    new MainGameTask(60, 60, 60, 60, 60, 60, 20).runTaskTimer(AcesUHC.getInstance(), 0, 20);
+                    break;
+
+                case "start":
+                    player.sendMessage(admin + "§bStarting game with option : §e" + GameMode.valueOf(args[4]));
+                   new StartGameTask(Integer.parseInt(args[2]), Integer.parseInt(args[3]), GameMode.valueOf(args[4].toUpperCase())).runTaskTimer(AcesUHC.getInstance(), 0, 20);
+            }
         }
 
     }

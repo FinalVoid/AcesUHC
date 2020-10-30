@@ -3,6 +3,8 @@ package net.aksyo.game.tasks;
 import net.aksyo.AcesUHC;
 import net.aksyo.game.GameState;
 import net.aksyo.game.managers.GameManager;
+import net.aksyo.utils.BasicUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class MainGameTask extends BukkitRunnable{
@@ -17,7 +19,7 @@ public class MainGameTask extends BukkitRunnable{
     private int immune;
 
     //Class variables
-    private int index = 0;
+    public static int index = 0;
     private int totalWhispers = 1;
 
     private AcesUHC acesUHC = AcesUHC.getInstance();
@@ -53,6 +55,10 @@ public class MainGameTask extends BukkitRunnable{
 
         }
 
+        if (index == 60) {
+            BasicUtils.silentBroadcast(prefix + "§cNe te surestimes pas Askekoi, Emma Watson c'est §lma meuf");
+        }
+
         if (index == roleReveal) {
             acesUHC.getTeamManager().revealRoles();
         }
@@ -65,8 +71,7 @@ public class MainGameTask extends BukkitRunnable{
             gManager.setDamage(true);
         }
 
-
-
+        System.out.println("Main game task value : " + index);
         index++;
 
     }

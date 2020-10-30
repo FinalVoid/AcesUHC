@@ -1,6 +1,7 @@
 package net.aksyo.listeners;
 
 import net.aksyo.AcesUHC;
+import net.aksyo.game.GameState;
 import net.aksyo.player.AcePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,12 +15,8 @@ public class PlayerMoveListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if (!player.isOp()) {
-
-            if (AcesUHC.getInstance().getGameManager().isMovement()) {
-                player.teleport(event.getFrom());
-            }
-
+        if (!AcesUHC.getInstance().getGameManager().isMovement() && !player.isOp()) {
+            player.teleport(event.getFrom());
         }
 
     }

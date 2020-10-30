@@ -23,7 +23,7 @@ public class Pion extends GameRole {
 
     @Override
     public String getGameName() {
-        return AcesUHC.getInstance().getGameModel().roles.get("as").replace("&", "§");
+        return AcesUHC.getInstance().getGameModel().roles.get("pion").replace("&", "§");
     }
 
     @Override
@@ -45,6 +45,7 @@ public class Pion extends GameRole {
             int power = new Random().nextInt(4);
             Player player = acePlayer.getPlayer();
             String prefix = AcesUHC.prefix;
+            System.out.println("Power, Value : " + power);
             switch (power) {
                 case 0:
                     player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 999999, 1));
@@ -68,7 +69,7 @@ public class Pion extends GameRole {
                     break;
                 case 3:
                     player.setFoodLevel(100);
-                    player.sendMessage(prefix + "§aTes pouvoirs de Pions se sont activés. Tu as desormais §cSaturation Illimité");
+                    player.sendMessage(prefix + "§aTes pouvoirs de Pions se sont activés. Tu as desormais \n§cSaturation Illimité");
                     break;
 
             }

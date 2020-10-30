@@ -117,18 +117,18 @@ public class GameManager {
 
     /**
      *
-     * @return if the pion can do the pacte with the joker
+     * @param jokerPacte set if the pacte is available or done
      */
-    public boolean isJokerPacte() {
-        return jokerPacte;
+    public void setJokerPacte(boolean jokerPacte) {
+        this.jokerPacte = jokerPacte;
     }
 
     /**
      *
-     * @param jokerPacte set if the pacte with joker is available
+     * @return if the pion can do the pacte with the joker
      */
-    public void setJokerPacte(boolean jokerPacte) {
-        this.jokerPacte = jokerPacte;
+    public boolean isJokerPacte() {
+        return jokerPacte;
     }
 
     /**

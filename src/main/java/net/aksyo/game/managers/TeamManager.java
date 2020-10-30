@@ -1,5 +1,6 @@
 package net.aksyo.game.managers;
 
+import com.google.gson.internal.$Gson$Preconditions;
 import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.RoleType;
 import net.aksyo.game.roles.ITeam;
@@ -8,21 +9,24 @@ import net.aksyo.game.teams.*;
 import net.aksyo.player.AcePlayer;
 import net.aksyo.player.PlayerOption;
 import net.aksyo.utils.BasicUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class TeamManager {
 
     private Map<ITeam, HashSet<AcePlayer>> TEAMS = new HashMap<>();
+    private Map<ITeam, Chest> CHESTS = new HashMap<>();
     private LinkedList<AcePlayer> deadPlayers = new LinkedList<>();
+    private HashSet<AcePlayer> pactePlayers = new HashSet<>();
 
     public TeamManager() {
         TEAMS.put(PiquesTeam.getInstance(), new HashSet<AcePlayer>());
@@ -33,6 +37,7 @@ public class TeamManager {
     }
 
     public boolean setTeam(Player player, ITeam team, RoleType roleType, SubRoleType subRoleType) {
+        System.out.println(player.getName() + " Role : " + roleType.get().getName());
         return TEAMS.get(team).add(new AcePlayer(player, team, roleType, subRoleType));
     }
 
@@ -41,10 +46,19 @@ public class TeamManager {
         Set<AcePlayer> set = new HashSet<>();
 
         for (HashSet<AcePlayer> t : TEAMS.values()) {
+            t.forEach(p -> System.out.println("Player : " + p.getPlayer().getName() + " Role : " + p.getRoleType().get().getName()));
             set.addAll(t);
         }
 
         return set;
+    }
+
+    public ITeam getTeamByName(String name) {
+        return TEAMS.keySet().stream().filter(t -> t.getName().equalsIgnoreCase(name)).findFirst().get();
+    }
+
+    public RoleType getRoleByName(String name) {
+        return Arrays.stream(RoleType.values()).filter(r -> r.get().getName().equalsIgnoreCase(name)).findAny().get();
     }
 
     public ITeam[] getTeams() {
@@ -66,6 +80,10 @@ public class TeamManager {
             }
         }
         return null;
+    }
+
+    public AcePlayer getJoker() {
+        return getAcePlayers().stream().filter(p -> p.getRoleType() == RoleType.JOKER).findFirst().get();
     }
 
     public Set<AcePlayer> getTeamMembers(ITeam team) {
@@ -227,6 +245,22 @@ public class TeamManager {
 
     }
 
+    public void spawnChests() {
+
+        for (ITeam team : getTeams()) {
+            if (team instanceof JokerTeam) continue;
+
+            Chest chest = AcesUHC.getInstance().getChestManager().spawnChest(team);
+            CHESTS.put(team, chest);
+            System.out.println("Spawned Chest " + team.getName());
+        }
+
+    }
+
+    public boolean checkChest(ITeam team, Block block) {
+        return CHESTS.get(team).getLocation() == block.getLocation();
+    }
+
     public void playVictory(ITeam team) {
 
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -260,11 +294,48 @@ public class TeamManager {
                         f.setFireworkMeta(fm);
 
                     }
-                }.runTaskLater(AcesUHC.getInstance(), 40);
+                }.runTaskLater(AcesUHC.getInstance(), 20 * i);
             }
 
         }
 
+    }
+
+    public void applyJokerPacte(AcePlayer acePlayer) {
+
+        Player player = acePlayer.getPlayer();
+        Location location = player.getLocation();
+        DecimalFormat df = new DecimalFormat("###.###");
+
+        getJoker().getPlayer().sendMessage(AcesUHC.prefix + "§b" + player.getName() + " §e a passé un pacte avec vous. Voici ses coordonnées : \n" +
+                "§6X : §9" + df.format(location.getX()) + " §6Y : §9" + df.format(location.getY()) + " §6Z : §9" + df.format(location.getZ()));
+
+        int r = new Random().nextInt(3);
+
+        switch (r) {
+            case 0 :
+                player.setHealthScale(10);
+                player.sendMessage(AcesUHC.prefix + "§cVous avez perdu 5 coeurs a cause du pacte!");
+                System.out.println("Pion Fourbe value : " + r + " Player : " + player.getName());
+                break;
+            case 1:
+                player.setHealthScale(20);
+                player.sendMessage(AcesUHC.prefix + "§eIl ne s'est rien passé");
+                System.out.println("Pion Fourbe value : " + r + " Player : " + player.getName());
+                break;
+            case 2:
+                player.setHealthScale(30);
+                player.sendMessage(AcesUHC.prefix + "§aVous avez gagner 5 coeurs grace au pacte!");
+                System.out.println("Pion Fourbe value : " + r + " Player : " + player.getName());
+                break;
+
+        }
+
+
+    }
+
+    public HashSet<AcePlayer> getPactePlayers() {
+        return pactePlayers;
     }
 
     protected int randomValue(int bound) {
