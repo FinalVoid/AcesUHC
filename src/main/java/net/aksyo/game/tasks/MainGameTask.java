@@ -4,6 +4,7 @@ import net.aksyo.AcesUHC;
 import net.aksyo.game.GameState;
 import net.aksyo.game.managers.GameManager;
 import net.aksyo.utils.BasicUtils;
+import net.aksyo.utils.LogFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -59,7 +60,7 @@ public class MainGameTask extends BukkitRunnable{
         if (index >= timeToStartWhispers && index <= timeToStopWhispers) {
 
             if (index == timeToStartWhispers || index == timeToStartWhispers + (timeBetweenWhispers * totalWhispers) || index == timeToStopWhispers) {
-                System.out.println("Index : " + index);
+                if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Whisper ! Index : " + index);
                 AcesUHC.getInstance().getTeamManager().whisper(totalWhispers);
                 if (index != timeToStartWhispers) {
                     totalWhispers++;
@@ -88,14 +89,16 @@ public class MainGameTask extends BukkitRunnable{
 
         if (index == pvp) {
             BasicUtils.silentBroadcast(prefix + "§6Le pvp est activé! ");
-            System.out.println("Index : " + index);
+            if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Pvp activated ! Index : " + index);
+
             gManager.setPvp(true);
             BasicUtils.getGameStartingPlayers(GameMode.SURVIVAL).forEach(p -> p.setHealth(20));
         }
 
         if (index == immune) {
             BasicUtils.silentBroadcast(prefix + "§6Vous n'etes plus invulnerable! ");
-            System.out.println("Index : " + index);
+            if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Player vulnerability ! Index : " + index);
+
             gManager.setDamage(true);
         }
 
