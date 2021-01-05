@@ -48,7 +48,7 @@ public class PlayerDeathListener implements Listener {
 
                 if (tManager.isAsAlive(acePlayer.getTeam()) && !possibleVictory.getRight()) {
                     if (!acePlayer.hasSubRole()) {
-                       //respawnPion(acePlayer);
+                       respawnPion(acePlayer);
                     }
                     return;
                 }
