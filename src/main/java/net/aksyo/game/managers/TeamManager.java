@@ -1,7 +1,7 @@
 package net.aksyo.game.managers;
 
-import com.google.gson.internal.$Gson$Preconditions;
-import com.sun.media.jfxmediaimpl.HostUtils;
+
+
 import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.RoleType;
 import net.aksyo.game.roles.ITeam;
@@ -11,6 +11,7 @@ import net.aksyo.game.teams.*;
 import net.aksyo.player.AcePlayer;
 import net.aksyo.player.PlayerOption;
 import net.aksyo.utils.BasicUtils;
+import net.aksyo.utils.LogFormat;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -19,17 +20,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TeamManager {
 
+    private GameManager gManager = AcesUHC.getInstance().getGameManager();
+
+    private int startingPlayers;
+
     private Map<ITeam, HashSet<AcePlayer>> TEAMS = new HashMap<>();
     private Map<ITeam, Chest> CHESTS = new HashMap<>();
     private LinkedList<AcePlayer> deadPlayers = new LinkedList<>();
     private HashSet<AcePlayer> pactePlayers = new HashSet<>();
+    private HashSet<AcePlayer> saturationPowerPlayers = new HashSet<>();
     private boolean jokerChange = false;
 
     public TeamManager() {
@@ -41,8 +46,11 @@ public class TeamManager {
     }
 
     public boolean setTeam(Player player, ITeam team, RoleType roleType, SubRoleType subRoleType) {
-        System.out.println(player.getName() + " Role : " + roleType.get().getName());
         return TEAMS.get(team).add(new AcePlayer(player, team, roleType, subRoleType));
+    }
+
+    public void setStartingPlayers(GameMode gameMode) {
+        this.startingPlayers = BasicUtils.getGameStartingPlayers(gameMode).size();
     }
 
     public Set<AcePlayer> getAcePlayers() {
@@ -50,8 +58,12 @@ public class TeamManager {
         Set<AcePlayer> set = new HashSet<>();
 
         for (HashSet<AcePlayer> t : TEAMS.values()) {
-            t.forEach(p -> System.out.println("Player : " + p.getPlayer().getName() + " Role : " + p.getRoleType().get().getName()));
             set.addAll(t);
+            if (t != null) {
+                for (AcePlayer acePlayer : t) {
+                    System.out.println(acePlayer.getPlayer().getName());
+                }
+            }
         }
 
         return set;
@@ -74,6 +86,10 @@ public class TeamManager {
         }
 
         return teams;
+    }
+
+    public Map<ITeam, HashSet<AcePlayer>> getTeamAndMembers() {
+        return new HashMap<ITeam, HashSet<AcePlayer>>(TEAMS);
     }
 
     public AcePlayer getAcePlayer(Player player) {
@@ -120,20 +136,33 @@ public class TeamManager {
 
     }
 
+    public HashSet<AcePlayer> getSaturationPowerPlayers() {
+        return saturationPowerPlayers;
+    }
+
+    public int getAlivePlayersNumber() {
+
+        if (TEAMS.size() == 0 || TEAMS.isEmpty()) {
+            return 0;
+        }
+
+        return startingPlayers - deadPlayers.size(); //TODO auto calculation
+
+    }
+
     public boolean distribute(List<Player> players) {
 
         if ((players.size() - 1) % 4 == 0) {
 
-            System.out.println("Distributing Roles!");
+            if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Distributing roles!");
 
             final int times = (players.size() - 1) / 4;
-            System.out.println("Times : " + times);
+
+            Collections.shuffle(players);
 
             int randomJoker = randomValue(players.size());
             setTeam(players.get(randomJoker), JokerTeam.getInstance(), RoleType.JOKER, SubRoleType.NULL);
-            System.out.println("Joker set to " + players.get(randomJoker).getName() + " Random Value : " + randomJoker + " List Size : " + players.size());
             players.remove(randomJoker);
-            System.out.println("New Size : " + getAcePlayers().size());
 
             for (ITeam ITeam : AcesUHC.getInstance().getTeamManager().getTeams()) {
 
@@ -142,35 +171,27 @@ public class TeamManager {
                 }
 
                 boolean isAsSet = false, isPionFourbeSet = false;
-                System.out.println("Team : " + ITeam.getName());
                 for (int i = 0; i < times; i++) {
                     int playerIndex = randomValue(players.size());
-                    System.out.println("As Set : " + (isAsSet ? "YES" : "NO") + " PionFourbe : " + (isPionFourbeSet ? "YES" : "NO"));
                     if (!isAsSet) {
                         setTeam(players.get(playerIndex), ITeam, RoleType.AS, SubRoleType.NULL);
-                        System.out.println("As set to " + players.get(playerIndex).getName() + " Random Value : " + playerIndex + " List Size : " + players.size());
                         players.remove(playerIndex);
-                        System.out.println("New Size : " + getAcePlayers().size());
                         isAsSet = true;
                         continue;
                     } else if (!isPionFourbeSet) {
                         setTeam(players.get(playerIndex), ITeam, RoleType.PION, SubRoleType.PIONFOURBE);
-                        System.out.println("Fourbe set to " + players.get(playerIndex).getName() + " Random Value : " + playerIndex + " List Size : " + players.size());
                         players.remove(playerIndex);
-                        System.out.println("New Size : " + getAcePlayers().size());
                         isPionFourbeSet = true;
                         continue;
                     }
                     setTeam(players.get(playerIndex), ITeam, RoleType.PION, SubRoleType.NULL);
-                    System.out.println("Pion set to " + players.get(playerIndex).getName() + " Random Value : " + playerIndex + " List Size : " + players.size());
                     players.remove(playerIndex);
-                    System.out.println("New Size : " + getAcePlayers().size());
                 }
             }
             return true;
         }
 
-        System.out.println("Cannot distribute roles");
+        AcesUHC.getInstance().log(LogFormat.ERROR, "Cannot distribute roles");
         return false;
 
 
@@ -179,7 +200,7 @@ public class TeamManager {
     public AcePlayer getTeamAsPlayer(ITeam team) {
 
         if (team instanceof JokerTeam) {
-            System.out.println("Cannot check for Joker Team");
+            if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Cannot check for joker team");
             return null;
         }
 
@@ -196,7 +217,7 @@ public class TeamManager {
     public boolean isAsAlive(ITeam team) {
 
         if (team instanceof JokerTeam) {
-            System.out.println("Cannot check for Joker Team");
+            if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Cannot check for joker team");
             return true;
         }
 
@@ -251,46 +272,10 @@ public class TeamManager {
 
             Chest chest = AcesUHC.getInstance().getChestManager().spawnChest(team);
             CHESTS.put(team, chest);
-            System.out.println("Spawned Chest " + team.getName());
+            if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Spawned Chest");
         }
 
     }
-
-    /*public void whisper(int currentWhisper, double whispers) {
-
-        DecimalFormat df = new DecimalFormat("###.###");
-
-        for (ITeam team : getTeams()) {
-
-            if (team instanceof JokerTeam) continue;
-            if (TEAMS.get(team).size() == 0) continue;
-
-            Location chest = CHESTS.get(team).getLocation();
-            String line = "§d§lWHISPER §e> §r§bX : §c" + df.format(chest.getX()) + " §bY : §c" + df.format(chest.getY()) + " §bZ : §c" + df.format(chest.getZ());
-            String whisper = "";
-
-            for (char c : line.toCharArray()) {
-                if (Character.isDigit(c)) {
-                    System.out.println("Current whisper : " + currentWhisper + " Whispers : " + whispers);
-                    System.out.println("Bound is : " + ((whispers * 2) - currentWhisper));
-                    int r = new Random().nextInt((int) (whispers * 2) - currentWhisper);
-                    System.out.println("R Value : " + r);
-                    if (r != 0) {
-                        whisper += "§k" + c;
-                        continue;
-                    }
-                    whisper += c;
-                }
-                whisper += c;
-            }
-
-            System.out.println("Team : " + team.getName());
-            System.out.println("Whisper : " + whisper);
-            getTeamAsPlayer(team).getPlayer().sendMessage(whisper);
-
-        }
-
-    } */
 
     public void whisper(int current) {
 
@@ -304,13 +289,12 @@ public class TeamManager {
             String whisper = "§d§lWHISPER §e> §b";
             String[] jam = {x, y, z};
 
-            System.out.println("X " + x + " Y " + y + " Z " + z);
+            if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "X " + x + " Y " + y + " Z " + z);
 
             for (String str : jam) {
                 char[] c = str.toCharArray();
-                System.out.println("Team : " + team.getName() + " Current : " + current + " Length : " + c.length);
+                if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Team : " + team.getName() + " Current : " + current + " Length : " + c.length);
                 if (current > c.length) {
-                    System.out.println("Current superior");
                     whisper += str;
                     continue;
                 }
@@ -322,8 +306,6 @@ public class TeamManager {
                 }
                 whisper += "§r §b";
             }
-            System.out.println("Team : " + team.getName());
-            System.out.println("Whisper : " + whisper);
             getTeamAsPlayer(team).getPlayer().sendMessage(whisper);
 
         }
@@ -363,7 +345,7 @@ public class TeamManager {
 
         for (AcePlayer acePlayer : getTeamMembers(team)) {
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 10; i++) {
                 new BukkitRunnable() {
 
                     @Override
@@ -406,17 +388,17 @@ public class TeamManager {
             case 0 :
                 player.setHealthScale(10);
                 player.sendMessage(AcesUHC.prefix + "§cVous avez perdu 5 coeurs a cause du pacte!");
-                System.out.println("Pion Fourbe value : " + r + " Player : " + player.getName());
+                if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Pion Fourbe value : " + r + " Player : " + player.getName());
                 break;
             case 1:
                 player.setHealthScale(20);
                 player.sendMessage(AcesUHC.prefix + "§eIl ne s'est rien passé");
-                System.out.println("Pion Fourbe value : " + r + " Player : " + player.getName());
+                if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Pion Fourbe value : " + r + " Player : " + player.getName());
                 break;
             case 2:
                 player.setHealthScale(30);
                 player.sendMessage(AcesUHC.prefix + "§aVous avez gagner 5 coeurs grace au pacte!");
-                System.out.println("Pion Fourbe value : " + r + " Player : " + player.getName());
+                if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Pion Fourbe value : " + r + " Player : " + player.getName());
                 break;
 
         }

@@ -1,11 +1,12 @@
-package net.aksyo.command;
+package net.aksyo.command.game;
 
 import net.aksyo.AcesUHC;
+import net.aksyo.command.AceCommand;
 import net.aksyo.game.managers.TeamManager;
 import net.aksyo.player.AcePlayer;
 import org.bukkit.entity.Player;
 
-public class RoleCommand extends AceCommand{
+public class RoleCommand extends AceCommand {
 
 
     public RoleCommand() {
@@ -20,7 +21,7 @@ public class RoleCommand extends AceCommand{
             AcePlayer acePlayer = AcesUHC.getInstance().getTeamManager().getAcePlayer(player);
 
             player.sendMessage("§3Role : §l" + acePlayer.getRoleType().get().getGameName());
-            for (String str : acePlayer.getRoleType().get().getInformation()) {
+            for (String str : (acePlayer.hasSubRole() ? acePlayer.getSubRoleType().get().getInformation() : acePlayer.getRoleType().get().getInformation())) {
                 player.sendMessage(str);
             }
 

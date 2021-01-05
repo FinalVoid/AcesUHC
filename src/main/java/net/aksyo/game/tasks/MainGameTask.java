@@ -19,6 +19,7 @@ public class MainGameTask extends BukkitRunnable{
     private double roleReveal;
     private int pvp;
     private int immune;
+    private int borderReduction;
 
     //Class variables
     public static int index = 0;
@@ -30,21 +31,15 @@ public class MainGameTask extends BukkitRunnable{
 
     private String prefix = AcesUHC.prefix;
 
-    public MainGameTask(int timeToStartWhispers, double timeBetweenWhispers, int timeToStopWhispers, int jokerPacteAvailable, double roleReveal, int pvp, int immune) {
+    public MainGameTask(int timeToStartWhispers, double timeBetweenWhispers, int timeToStopWhispers, int jokerPacteAvailable, double roleReveal, int pvp, int immune, int borderReduction) {
         this.timeToStartWhispers = timeToStartWhispers * 60;
-        System.out.println("Time Start Whispers : " + this.timeToStartWhispers);
         this.timeBetweenWhispers = timeBetweenWhispers * 60;
-        System.out.println("Time Between Whispers : " + this.timeBetweenWhispers);
         this.timeToStopWhispers = timeToStopWhispers * 60;
-        System.out.println("Time Stop Whispers : " + this.timeToStopWhispers);
         this.jokerPacteAvailable = jokerPacteAvailable * 60;
-        System.out.println("Time Joker Pacte : " + this.jokerPacteAvailable);
         this.roleReveal = roleReveal * 60;
-        System.out.println("Time Role : " + this.roleReveal);
         this.pvp = pvp * 60;
-        System.out.println("Time PVP : " + this.pvp);
         this.immune = immune * 60;
-        System.out.println("Time Immune : " + this.immune);
+        this.borderReduction = borderReduction * 60;
 
         whispers = (timeToStopWhispers - timeToStartWhispers) / timeBetweenWhispers + 1;
     }
@@ -57,6 +52,7 @@ public class MainGameTask extends BukkitRunnable{
         if (gManager.isGameState(GameState.ENDING)) cancel();
 
         if (index == jokerPacteAvailable) {
+            BasicUtils.silentBroadcast(prefix + "§6Les pions fourbes peuvent desormais passer un pacte avec le Joker");
             gManager.setJokerPacte(true);
         }
 
@@ -73,8 +69,17 @@ public class MainGameTask extends BukkitRunnable{
 
         }
 
+        if (index == borderReduction) {
+            BasicUtils.silentBroadcast(prefix + "§cLa bordure commence a retrecir!");
+            AcesUHC.getInstance().getWorldManager().startBorderShrink(150, 1);
+        }
+
         if (index == 200) {
-            BasicUtils.silentBroadcast(prefix + "§cNe te surestimes pas Askekoi, Emma Watson c'est §lma meuf");
+            BasicUtils.silentBroadcast(prefix + "§cSalut mon petit Sebou. Tu vas bien ?");
+        }
+
+        if (index == 202) {
+            BasicUtils.silentBroadcast(prefix + "§cAu final jm'en fou");
         }
 
         if (index == roleReveal) {

@@ -9,6 +9,7 @@ import net.aksyo.game.roles.gamesroles.subroles.SubRoleType;
 import net.aksyo.game.tasks.MainGameTask;
 import net.aksyo.game.tasks.StartGameTask;
 import net.aksyo.player.AcePlayer;
+import net.aksyo.utils.BasicUtils;
 import net.aksyo.utils.GUI;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -39,6 +40,7 @@ public class DebugCommand extends AceCommand {
         if (args.length == 1) {
             if(AcesUHC.getInstance().getGameManager().isDebug()) return;
             player.sendMessage(admin + "§bDebug is now activated!");
+            BasicUtils.silentBroadcast(admin + player.getName() + " §bActivated debug mode!");
             AcesUHC.getInstance().getGameManager().activateDebug();
             return;
         }
@@ -88,7 +90,7 @@ public class DebugCommand extends AceCommand {
                     break;
 
                 case "main":
-                    new MainGameTask(3, 1.5, 6, 60, 1, 1, 20).runTaskTimer(AcesUHC.getInstance(), 0, 20);
+                    new MainGameTask(3, 1.5, 6, 60, 1, 1, 20, 75).runTaskTimer(AcesUHC.getInstance(), 0, 20);
                     break;
 
                 case "start":
@@ -100,6 +102,9 @@ public class DebugCommand extends AceCommand {
                     executeWhisper(Integer.parseInt(args[2]));
                     player.sendMessage(admin + "§bExecuted Whispers.");
                     break;
+
+                case "respawn":
+
             }
         }
 
@@ -131,7 +136,6 @@ public class DebugCommand extends AceCommand {
             lore.add("§3Game Name : " + iTeam.getGameName());
             lore.add("§3Team Members :");
             for (AcePlayer p : tManager.getTeamMembers(iTeam)) {
-                System.out.println(p.getPlayer().getName());
                 lore.add("§2" + p.getPlayer().getName() + " §8- §9" + (p.hasSubRole() ? p.getSubRoleType().get().getGameName() : p.getRoleType().get().getGameName()));
             }
             meta.setDisplayName("§3" + iTeam.getName());
@@ -154,8 +158,6 @@ public class DebugCommand extends AceCommand {
         ItemStack item = new ItemStack(Material.DIAMOND);
         ItemMeta meta = item.getItemMeta();
 
-        System.out.println(tManager.getAcePlayers().size());
-
         for (AcePlayer acePlayer : tManager.getAcePlayers()) {
             meta.setDisplayName(acePlayer.getPlayer().getName());
             meta.setLore(Arrays.asList(" ",
@@ -167,6 +169,7 @@ public class DebugCommand extends AceCommand {
                 player.sendMessage(" ");
                 player.sendMessage("§bTeam : §e" + acePlayer.getTeam().getName());
                 player.sendMessage("§bRole : §e" + (acePlayer.hasSubRole() ? acePlayer.getSubRoleType().get().getGameName() : acePlayer.getRoleType().get().getGameName()));
+                acePlayer.getPlayer().sendMessage("§cTest");
 
             });
 
@@ -229,4 +232,9 @@ public class DebugCommand extends AceCommand {
         tManager.whisper(t);
 
     }
+
+    private void respawnPion() {
+        
+    }
+
 }

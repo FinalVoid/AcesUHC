@@ -1,5 +1,7 @@
 package net.aksyo.command;
 
+import net.aksyo.command.game.JokerPacteCommand;
+import net.aksyo.command.game.RoleCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

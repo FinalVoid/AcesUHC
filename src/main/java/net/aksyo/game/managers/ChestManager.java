@@ -2,6 +2,7 @@ package net.aksyo.game.managers;
 
 import net.aksyo.AcesUHC;
 import net.aksyo.game.roles.ITeam;
+import net.aksyo.utils.LogFormat;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -16,6 +17,8 @@ import java.util.Random;
 
 public class ChestManager {
 
+    protected GameManager gManager = AcesUHC.getInstance().getGameManager();;
+
     private int diameter;
 
     public ChestManager(int radius) {
@@ -28,7 +31,8 @@ public class ChestManager {
 
         while (chestLocation.clone().subtract(0, 1, 0).getBlock().getType() == Material.AIR) {
             int y = new Random().nextInt(150);
-            System.out.println("Repeated Y : " + y + " Team : " + team.getName());
+
+            if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Repeated Y : " + y + " Team : " + team.getName());
             chestLocation = new Location(AcesUHC.getInstance().getWorldManager().world, chestLocation.getX(), y, chestLocation.getZ());
         }
 
@@ -43,10 +47,11 @@ public class ChestManager {
     }
 
     private Location generateRandomLocation(ITeam team) {
+
         int x = - (diameter) + new Random().nextInt(diameter * 2);
         int y = new Random().nextInt(150);
         int z = -diameter + new Random().nextInt(diameter * 2);
-        System.out.println("Location " + team.getName() + " X : " + x + " Y : " + y + " Z : " + z);
+        AcesUHC.getInstance().log(LogFormat.DEBUG, "Location " + team.getName() + " X : " + x + " Y : " + y + " Z : " + z);
 
         return new Location(AcesUHC.getInstance().getWorldManager().world, x, y, z);
     }

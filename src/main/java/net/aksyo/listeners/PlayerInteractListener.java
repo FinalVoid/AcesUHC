@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class PlayerInteractListener implements Listener {
 
-    private TeamManager tManager = AcesUHC.getInstance().getTeamManager();
+    protected TeamManager tManager = AcesUHC.getInstance().getTeamManager();
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
@@ -22,20 +22,6 @@ public class PlayerInteractListener implements Listener {
         Player player = event.getPlayer();
         Action action = event.getAction();
         ItemStack item = event.getItem();
-
-        /*if (action == Action.RIGHT_CLICK_BLOCK) {
-            Block block = event.getClickedBlock();
-            if (block.getType() == Material.CHEST) {
-                AcePlayer acePlayer = tManager.getAcePlayer(player);
-                if (acePlayer != null) {
-                    if (!tManager.checkChest(acePlayer.getTeam(), block)) {
-                        event.setCancelled(true);
-                    }
-
-                }
-
-            }
-        } */
 
         if (item != null) {
             if (item.getType() == Material.BANNER && item.hasItemMeta()) {

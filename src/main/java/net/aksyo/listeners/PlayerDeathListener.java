@@ -21,7 +21,7 @@ import java.util.Random;
 
 public class PlayerDeathListener implements Listener {
 
-    private TeamManager tManager = AcesUHC.getInstance().getTeamManager();
+    protected TeamManager tManager = AcesUHC.getInstance().getTeamManager();
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
@@ -48,7 +48,7 @@ public class PlayerDeathListener implements Listener {
 
                 if (tManager.isAsAlive(acePlayer.getTeam()) && !possibleVictory.getRight()) {
                     if (!acePlayer.hasSubRole()) {
-                       // respawnPion(acePlayer);
+                       //respawnPion(acePlayer);
                     }
                     return;
                 }
@@ -62,9 +62,8 @@ public class PlayerDeathListener implements Listener {
     private void respawnPion(AcePlayer acePlayer) {
 
         Player player = acePlayer.getPlayer();
-        player.getPlayer().sendMessage(AcesUHC.prefix + "§aVous allez respawn dans 1 minutes!");
+        player.sendMessage(AcesUHC.prefix + "§aVous allez respawn dans 1 minutes!");
         new BukkitRunnable() {
-
             @Override
             public void run() {
                 acePlayer.revive();
@@ -83,21 +82,6 @@ public class PlayerDeathListener implements Listener {
             }
         }.runTaskLater(AcesUHC.getInstance(), 1200);
 
-    }
-
-    private boolean checkForVictory(ITeam team) {
-
-        for (AcePlayer acePlayer : tManager.getAcePlayers()) {
-
-            if (acePlayer.getTeam() == team) continue;
-
-            if (acePlayer.hasOption(PlayerOption.PLAYER)) {
-                return false;
-            }
-
-        }
-
-        return true;
     }
 
     private Pair<Boolean, ITeam> checkForVictory() {

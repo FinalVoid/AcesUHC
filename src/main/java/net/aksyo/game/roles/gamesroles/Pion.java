@@ -53,7 +53,7 @@ public class Pion extends GameRole {
                     player.sendMessage(prefix + "§aTes pouvoirs de Pions se sont activés. Tu as desormais §cFire Resistance");
                     break;
                 case 1:
-                    ItemStack item = new ItemStack(Material.BOOK);
+                    ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
                     ItemMeta meta = item.getItemMeta();
                     meta.addEnchant(Enchantment.DEPTH_STRIDER, 3, true);
                     item.setItemMeta(meta);
@@ -61,7 +61,7 @@ public class Pion extends GameRole {
                     player.sendMessage(prefix + "§aTes pouvoirs de Pions se sont activés. Tu as possède desormais un livre §cDepth Strider 3");
                     break;
                 case 2:
-                    ItemStack item2 = new ItemStack(Material.BOOK);
+                    ItemStack item2 = new ItemStack(Material.ENCHANTED_BOOK);
                     ItemMeta meta2 = item2.getItemMeta();
                     meta2.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
                     item2.setItemMeta(meta2);
@@ -70,7 +70,7 @@ public class Pion extends GameRole {
                     break;
                 case 3:
                     player.setFoodLevel(100);
-
+                    AcesUHC.getInstance().getTeamManager().getSaturationPowerPlayers().add(acePlayer);
                     player.sendMessage(prefix + "§aTes pouvoirs de Pions se sont activés. Tu as desormais \n§cSaturation Illimité");
                     break;
 

@@ -17,7 +17,7 @@ public class StartGameTask extends BukkitRunnable {
     private int minimumPlayers;
     private int startTime;
     private int index;
-    private GameMode option;
+    private GameMode option, newOption;
 
     private AcesUHC acesUHC = AcesUHC.getInstance();
     private GameManager gManager = acesUHC.getGameManager();
@@ -54,12 +54,14 @@ public class StartGameTask extends BukkitRunnable {
 
             if(index == 1) {
 
-                acesUHC.getWorldManager().initializeMap(new Location(acesUHC.getInstance().getWorldManager().world, 0, 0, 0), 1800); //TODO Put back 0 0 0
+                acesUHC.getWorldManager().initializeMap(new Location(acesUHC.getInstance().getWorldManager().world, 0, 120, 0), 800); //TODO Put back 0 0 0
+
                 acesUHC.getWorldManager().teleportPlayers();
                 acesUHC.getWorldManager().createWorldBorder(acesUHC.getInstance().getServer().getWorlds().get(0));
                 gManager.setMovement(false);
                 BasicUtils.getGameStartingPlayers(option).forEach(p -> p.setGameMode(GameMode.SURVIVAL));
                 acesUHC.getTeamManager().distribute(BasicUtils.getGameStartingPlayers(GameMode.SURVIVAL));
+                this.newOption = GameMode.SURVIVAL;
 
                 getReleaseTask().runTaskTimer(acesUHC, 20 ,20);
 
@@ -87,7 +89,9 @@ public class StartGameTask extends BukkitRunnable {
                     gManager.setMovement(true);
                     acesUHC.getWorldManager().removeCages();
 
-                    new MainGameTask(30, 15, 60, 20, 0.5, 20, 1).runTaskTimer(acesUHC, 0, 20);
+                    acesUHC.getTeamManager().setStartingPlayers(newOption);
+
+                    new MainGameTask(30, 15, 60, 20, 0.5, 20, 1, 75).runTaskTimer(acesUHC, 0, 20);
 
                     AcesUHC.getInstance().getTeamManager().spawnChests();
 
@@ -105,4 +109,5 @@ public class StartGameTask extends BukkitRunnable {
             }
         };
     }
+
 }

@@ -43,6 +43,8 @@ public class GameProvider extends ScoreboardProvider {
             lines.add(" ");
         }
 
+        lines.add("§6Alive players : §3" + AcesUHC.getInstance().getTeamManager().getAlivePlayersNumber());
+        lines.add(" ");
         lines.add("§6Temps : §3" + dateFormat);
 
         //}

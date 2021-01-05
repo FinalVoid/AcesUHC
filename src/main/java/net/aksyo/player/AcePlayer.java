@@ -5,30 +5,50 @@ import net.aksyo.game.roles.RoleType;
 import net.aksyo.game.roles.ITeam;
 import net.aksyo.game.roles.gamesroles.subroles.SubRoleType;
 import net.aksyo.game.teams.JokerTeam;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class AcePlayer {
 
+    private UUID uuid;
     private Player player;
+
     private ITeam team;
     private RoleType roleType;
     private SubRoleType subRoleType;
     private PlayerOption option;
     private RoleOption roleOption;
+
+    private PlayerData playerData;
+
     private boolean revealed;
 
     public AcePlayer(Player player, ITeam ITeam, RoleType roleType, SubRoleType subRoleType) {
+        this.uuid = player.getUniqueId();
         this.player = player;
         this.roleType = roleType;
         this.team = roleType.get().isJoker() ? JokerTeam.getInstance() : ITeam;
         this.subRoleType = subRoleType;
         option = PlayerOption.PLAYER;
         roleOption = RoleOption.ROLE;
+
+        playerData = new PlayerData(this);
+
+    }
+
+    public void updatePlayerCache() {
+        this.player = Bukkit.getOnlinePlayers().stream().filter(p -> p.getUniqueId().compareTo(uuid) == 0).findFirst().get();
+
+    }
+
+    public UUID getUUID() {
+        return uuid;
     }
 
     public Player getPlayer() {

@@ -1,6 +1,6 @@
 name: AcesUHC
 author: Aksyo
-version: 0.0.1
+version: 0.2
 main: net.aksyo.AcesUHC
 commands:
   ace:

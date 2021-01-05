@@ -28,7 +28,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <outputDirectory>C:/Users/troll/Desktop/Desktop/Server Local/plugins</outputDirectory>
+                    <outputDirectory>C:\Users\final\Documents\Server Local\plugins</outputDirectory>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>

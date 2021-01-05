@@ -10,7 +10,9 @@ import net.aksyo.json.model.GameModel;
 import net.aksyo.listeners.*;
 import net.aksyo.scoreboard.ScoreboardHandler;
 import net.aksyo.scoreboard.ScoreboardManager;
+import net.aksyo.utils.LogFormat;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Difficulty;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -44,7 +46,7 @@ public class AcesUHC extends JavaPlugin {
         this.gameManager = new GameManager();
         this.teamManager = new TeamManager();
         this.worldManager = new WorldManager(getServer().getWorlds().get(0));
-        this.chestManager = new ChestManager(250);
+        this.chestManager = new ChestManager(100);
         this.scoreboardManager = new ScoreboardManager(this, "§3ACES UHC");
         scoreboardManager.runTaskTimerAsynchronously(this, 0, 20);
 
@@ -67,6 +69,12 @@ public class AcesUHC extends JavaPlugin {
     @Override
     public void onDisable() {
 
+    }
+
+    public void log(LogFormat format, String... args) {
+        for (String log : args) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[ACES UHC] " + format.getFormat() + log);
+        }
     }
 
     public static final AcesUHC getInstance() {
@@ -103,10 +111,12 @@ public class AcesUHC extends JavaPlugin {
     }
 
     private final void registerEvents() {
+        pluginManager.registerEvents(new PlayerGlobalListener(), this);
         pluginManager.registerEvents(new PlayerDeathListener(), this);
         pluginManager.registerEvents(new PlayerDamageListener(), this);
         pluginManager.registerEvents(new PlayerMoveListener(), this);
         pluginManager.registerEvents(new PlayerInteractListener(), this);
+        pluginManager.registerEvents(new PlayerFoodListener(), this);
         pluginManager.registerEvents(new ScenariosListener(), this);
 
     }

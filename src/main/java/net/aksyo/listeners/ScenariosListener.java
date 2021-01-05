@@ -15,9 +15,7 @@ public class ScenariosListener implements Listener {
 
         Block block = event.getBlock();
         Material material = block.getType();
-
-
-
+        
         switch (material) {
 
             case GOLD_ORE:
@@ -42,6 +40,9 @@ public class ScenariosListener implements Listener {
                 block.getState().update();
                 block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack (Material.GLASS));
                 break;
+
+            default:
+                event.setCancelled(false);
 
         }
 

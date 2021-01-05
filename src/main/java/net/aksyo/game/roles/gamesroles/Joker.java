@@ -42,8 +42,8 @@ public class Joker extends GameRole {
     @Override
     public Consumer<AcePlayer> applyPowers() {
         return acePlayer -> {
-            acePlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 24000, 1));
-            ItemStack item = new ItemStack(Material.BOOK);
+            acePlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 24000, 0));
+            ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
             ItemMeta meta = item.getItemMeta();
             meta.addEnchant(Enchantment.ARROW_DAMAGE, 2, true);
             meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 1, true);

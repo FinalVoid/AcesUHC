@@ -1,6 +1,7 @@
-package net.aksyo.command;
+package net.aksyo.command.game;
 
 import net.aksyo.AcesUHC;
+import net.aksyo.command.AceCommand;
 import net.aksyo.game.managers.GameManager;
 import net.aksyo.game.managers.TeamManager;
 import net.aksyo.game.roles.RoleType;
@@ -37,6 +38,7 @@ public class JokerPacteCommand extends AceCommand {
 
                 if (gManager.isJokerPacte() || !tManager.getPactePlayers().contains(acePlayer)) {
 
+                    System.out.println("Contains Player in pact : " + tManager.getPactePlayers().contains(acePlayer));
                     tManager.getPactePlayers().add(acePlayer);
                     tManager.applyJokerPacte(acePlayer);
 
