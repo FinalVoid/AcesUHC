@@ -1,5 +1,6 @@
 package net.aksyo.game.managers;
 
+import net.aksyo.game.GameOption;
 import net.aksyo.game.GameState;
 import org.bukkit.entity.Player;
 

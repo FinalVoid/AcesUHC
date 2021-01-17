@@ -2,6 +2,7 @@ package net.aksyo.command;
 
 import com.google.gson.internal.$Gson$Preconditions;
 import net.aksyo.AcesUHC;
+import net.aksyo.game.GameOption;
 import net.aksyo.game.managers.TeamManager;
 import net.aksyo.game.roles.ITeam;
 import net.aksyo.game.roles.RoleType;
@@ -95,7 +96,7 @@ public class DebugCommand extends AceCommand {
 
                 case "start":
                     player.sendMessage(admin + "§bStarting game with option : §e" + GameMode.valueOf(args[4]));
-                   new StartGameTask(Integer.parseInt(args[2]), Integer.parseInt(args[3]), GameMode.valueOf(args[4].toUpperCase())).runTaskTimer(AcesUHC.getInstance(), 0, 20);
+                   new StartGameTask(Integer.parseInt(args[2]), Integer.parseInt(args[3]), GameMode.valueOf(args[4].toUpperCase()), GameOption.SOLOSPAWN).runTaskTimer(AcesUHC.getInstance(), 0, 20);
                    break;
 
                 case "whisper":

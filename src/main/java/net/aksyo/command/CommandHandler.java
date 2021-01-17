@@ -17,6 +17,7 @@ public class CommandHandler implements CommandExecutor {
         new BugCommand();
         new SetGameModeCommand();
         new SetFoodCommand();
+        new StartGameCommand();
 
     }
 

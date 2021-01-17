@@ -1,6 +1,7 @@
 package net.aksyo.game.managers;
 
 import net.aksyo.AcesUHC;
+import net.aksyo.game.GameOption;
 import net.aksyo.game.roles.ITeam;
 import net.aksyo.game.teams.PiquesTeam;
 import net.aksyo.player.AcePlayer;
@@ -84,7 +85,12 @@ public class WorldManager {
     }
 
 
-    public void removeCages() {
+    public void removeCages(GameOption gameOption) {
+
+        if (gameOption == GameOption.TEAMSPAWN) {
+            CAGES.forEach(Cage::removeTeamCage);
+            return;
+        }
 
         CAGES.forEach(Cage::removeSoloCage);
 
