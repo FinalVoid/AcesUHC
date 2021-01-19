@@ -62,19 +62,20 @@ public class StartGameTask extends BukkitRunnable {
                 acesUHC.getWorldManager().initializeMap(new Location(acesUHC.getInstance().getWorldManager().world, 0, 120, 0), 800); //TODO Put back 0 0 0
                 BasicUtils.getGameStartingPlayers(option).forEach(p -> p.setGameMode(GameMode.SURVIVAL));
                 acesUHC.getTeamManager().distribute(BasicUtils.getGameStartingPlayers(GameMode.SURVIVAL));
+                this.newOption = GameMode.SURVIVAL;
 
                 //We want to make the player spawn in solo if the Game Option hasn't be set
                 //The solo spawn is the default Game Option
                 if (gameOption == GameOption.TEAMSPAWN) {
                     acesUHC.getWorldManager().teleportTeams();
                 } else {
-                    acesUHC.getWorldManager().teleportPlayers(option);
+                    acesUHC.getWorldManager().teleportPlayers(newOption);
                 }
 
                 acesUHC.getWorldManager().createWorldBorder(acesUHC.getInstance().getServer().getWorlds().get(0));
                 gManager.setMovement(false);
 
-                this.newOption = GameMode.SURVIVAL;
+
 
                 getReleaseTask().runTaskTimer(acesUHC, 20 ,20);
 
