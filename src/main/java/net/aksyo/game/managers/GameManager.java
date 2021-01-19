@@ -81,6 +81,11 @@ public class GameManager {
     }
 
     /**
+     * deactivates debug mode
+     */
+    public void deactivateDebug() { debug = false; }
+
+    /**
      *
      * @return If damages are activated
      */

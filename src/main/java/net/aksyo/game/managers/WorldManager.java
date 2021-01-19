@@ -35,9 +35,9 @@ public class WorldManager {
         this.width = width;
     }
 
-    public void teleportPlayers() {
+    public void teleportPlayers(GameMode gameMode) {
 
-        List<Player> playersList = BasicUtils.getGameStartingPlayers(GameMode.ADVENTURE);
+        List<Player> playersList = BasicUtils.getGameStartingPlayers(gameMode);
         Collections.shuffle(playersList);
 
         for (double angle = 0, inc = 360 / playersList.size(); angle < 360; angle += inc) {

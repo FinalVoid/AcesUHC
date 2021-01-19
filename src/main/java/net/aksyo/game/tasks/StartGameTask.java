@@ -6,7 +6,9 @@ import net.aksyo.game.GameState;
 import net.aksyo.game.managers.GameManager;
 import net.aksyo.game.roles.ITeam;
 import net.aksyo.game.teams.JokerTeam;
+import net.aksyo.player.AcePlayer;
 import net.aksyo.utils.BasicUtils;
+import net.aksyo.utils.LogFormat;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -66,7 +68,7 @@ public class StartGameTask extends BukkitRunnable {
                 if (gameOption == GameOption.TEAMSPAWN) {
                     acesUHC.getWorldManager().teleportTeams();
                 } else {
-                    acesUHC.getWorldManager().teleportPlayers();
+                    acesUHC.getWorldManager().teleportPlayers(option);
                 }
 
                 acesUHC.getWorldManager().createWorldBorder(acesUHC.getInstance().getServer().getWorlds().get(0));
@@ -81,7 +83,9 @@ public class StartGameTask extends BukkitRunnable {
 
         }
 
-        System.out.println("Start game task value : " + index);
+        if (index % 5 == 0) {
+            acesUHC.log(LogFormat.INFO, "Starting game in " + index);
+        }
         index--;
 
     }
@@ -107,6 +111,7 @@ public class StartGameTask extends BukkitRunnable {
                     AcesUHC.getInstance().getTeamManager().spawnChests();
 
                     gManager.setGameState(GameState.GAME);
+                    acesUHC.getTabManager().setAcesPlayerTabName(acesUHC.getTeamManager().getAcePlayers().toArray(new AcePlayer[0]));
 
                     cancel();
                 }
