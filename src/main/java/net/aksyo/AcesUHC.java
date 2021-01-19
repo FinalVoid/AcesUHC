@@ -10,6 +10,7 @@ import net.aksyo.json.model.GameModel;
 import net.aksyo.listeners.*;
 import net.aksyo.scoreboard.ScoreboardHandler;
 import net.aksyo.scoreboard.ScoreboardManager;
+import net.aksyo.tab.TabManager;
 import net.aksyo.utils.LogFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,6 +34,7 @@ public class AcesUHC extends JavaPlugin {
     private WorldManager worldManager;
     private ChestManager chestManager;
     private ScoreboardManager scoreboardManager;
+    private TabManager tabManager;
 
     private GameModel gameModel;
 
@@ -48,6 +50,7 @@ public class AcesUHC extends JavaPlugin {
         this.worldManager = new WorldManager(getServer().getWorlds().get(0));
         this.chestManager = new ChestManager(100);
         this.scoreboardManager = new ScoreboardManager(this, "§3ACES UHC");
+        tabManager = new TabManager();
         scoreboardManager.runTaskTimerAsynchronously(this, 0, 20);
 
         registerCommands();
@@ -100,6 +103,8 @@ public class AcesUHC extends JavaPlugin {
     public ChestManager getChestManager() {
         return chestManager;
     }
+
+    public TabManager getTabManager() { return tabManager; }
 
     public GameModel getGameModel() {
         return gameModel;

@@ -13,7 +13,7 @@ public class TabManager {
 
     public TabManager() {
         teamTabDesign = new HashMap<>();
-        teamTabDesign.put(JokerTeam.getInstance(), "§l§7J§r");
+        teamTabDesign.put(JokerTeam.getInstance(), "§l§7JK§r");
         teamTabDesign.put(PiquesTeam.getInstance(), "§l§9♠§r");
         teamTabDesign.put(TrefleTeam.getInstance(), "§l§9♣§r");
         teamTabDesign.put(CoeurTeam.getInstance(), "§l§c♥§r");
