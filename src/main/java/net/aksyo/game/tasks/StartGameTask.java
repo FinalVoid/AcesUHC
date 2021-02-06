@@ -75,8 +75,6 @@ public class StartGameTask extends BukkitRunnable {
                 acesUHC.getWorldManager().createWorldBorder(acesUHC.getInstance().getServer().getWorlds().get(0));
                 gManager.setMovement(false);
 
-
-
                 getReleaseTask().runTaskTimer(acesUHC, 20 ,20);
 
                 cancel();
@@ -112,7 +110,11 @@ public class StartGameTask extends BukkitRunnable {
                     AcesUHC.getInstance().getTeamManager().spawnChests();
 
                     gManager.setGameState(GameState.GAME);
-                    acesUHC.getTabManager().setAcesPlayerTabName(acesUHC.getTeamManager().getAcePlayers().toArray(new AcePlayer[0]));
+                    acesUHC.getTabManager().setAcesPlayerTabName(acesUHC.getTeamManager().getAcePlayers());
+
+                    for (AcePlayer acePlayer : acesUHC.getTeamManager().getAcePlayers()) {
+                        acePlayer.getPlayerData().startRecordingTimeLived();
+                    }
 
                     cancel();
                 }

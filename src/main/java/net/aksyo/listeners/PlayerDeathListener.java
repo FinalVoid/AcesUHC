@@ -37,6 +37,10 @@ public class PlayerDeathListener implements Listener {
             + " §eIl faisait partie de l'equipe des : " + acePlayer.getTeam().getGameName());
 
             acePlayer.kill();
+            acePlayer.getPlayerData().addDeath();
+            acePlayer.getPlayerData().stopRecordingTimeLived();
+
+            addPlayerData(event.getEntity().getKiller());
 
             Pair<Boolean, ITeam> possibleVictory = checkForVictory();
             if (possibleVictory.getRight()) {
@@ -58,6 +62,15 @@ public class PlayerDeathListener implements Listener {
         }
     }
 
+    private void addPlayerData(Player player) {
+
+        AcePlayer acePlayer = tManager.getAcePlayer(player);
+
+        if (acePlayer != null) {
+            acePlayer.getPlayerData().addKill();
+        }
+
+    }
 
     private void respawnPion(AcePlayer acePlayer) {
 

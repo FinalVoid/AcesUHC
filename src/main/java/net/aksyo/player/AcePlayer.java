@@ -84,6 +84,7 @@ public class AcePlayer {
             int x = new Random().nextInt(125), z = new Random().nextInt(125);
             player.teleport(new Location(player.getWorld(), x, 200, z));
             player.setGameMode(GameMode.SURVIVAL);
+            playerData.startRecordingTimeLived();
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -112,6 +113,10 @@ public class AcePlayer {
 
     public boolean isRevealed() {
         return roleOption == RoleOption.SUBROLE;
+    }
+
+    public PlayerData getPlayerData() {
+        return playerData;
     }
 }
 
