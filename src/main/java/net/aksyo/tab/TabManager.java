@@ -6,6 +6,7 @@ import net.aksyo.player.AcePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class TabManager {
 
@@ -21,7 +22,7 @@ public class TabManager {
 
     }
 
-    public void setAcesPlayerTabName(AcePlayer[] acePlayers) {
+    public void setAcesPlayerTabName(Set<AcePlayer> acePlayers) {
 
         for (AcePlayer acePlayer : acePlayers) {
 
