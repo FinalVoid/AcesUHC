@@ -75,14 +75,6 @@ public class MainGameTask extends BukkitRunnable{
             AcesUHC.getInstance().getWorldManager().startBorderShrink(150, 1);
         }
 
-        if (index == 200) {
-            BasicUtils.silentBroadcast(prefix + "§cSalut mon petit Sebou. Tu vas bien ?");
-        }
-
-        if (index == 202) {
-            BasicUtils.silentBroadcast(prefix + "§cAu final jm'en fou");
-        }
-
         if (index == roleReveal) {
             acesUHC.getTeamManager().revealRoles();
         }

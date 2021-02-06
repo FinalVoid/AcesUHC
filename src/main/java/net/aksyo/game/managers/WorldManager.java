@@ -115,7 +115,7 @@ public class WorldManager {
     //Speed in block per second
     public void startBorderShrink(int finalWidth, double speed) {
 
-        double time = Math.floor((width - finalWidth) / 2);
+        double time = Math.floor((width - finalWidth) / speed);
 
         border.setSize(finalWidth, (long) time);
 
