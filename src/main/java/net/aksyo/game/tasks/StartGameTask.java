@@ -59,7 +59,7 @@ public class StartGameTask extends BukkitRunnable {
 
             if(index == 1) {
 
-                acesUHC.getWorldManager().initializeMap(new Location(acesUHC.getInstance().getWorldManager().world, 0, 120, 0), 800); //TODO Put back 0 0 0
+                acesUHC.getWorldManager().initializeMap(new Location(acesUHC.getInstance().getWorldManager().world, 0, 120, 0), 850); //TODO Put back 0 0 0
                 BasicUtils.getGameStartingPlayers(option).forEach(p -> p.setGameMode(GameMode.SURVIVAL));
                 acesUHC.getTeamManager().distribute(BasicUtils.getGameStartingPlayers(GameMode.SURVIVAL));
                 this.newOption = GameMode.SURVIVAL;

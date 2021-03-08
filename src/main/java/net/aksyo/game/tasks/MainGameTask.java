@@ -61,11 +61,10 @@ public class MainGameTask extends BukkitRunnable{
 
             if (index == timeToStartWhispers || index == timeToStartWhispers + (timeBetweenWhispers * totalWhispers) || index == timeToStopWhispers) {
                 if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Whisper ! Index : " + index);
-                AcesUHC.getInstance().getTeamManager().whisper(totalWhispers);
                 if (index != timeToStartWhispers) {
                     totalWhispers++;
                 }
-
+                AcesUHC.getInstance().getTeamManager().whisper(totalWhispers);
             }
 
         }

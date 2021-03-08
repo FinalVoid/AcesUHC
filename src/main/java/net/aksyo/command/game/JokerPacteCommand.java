@@ -9,6 +9,7 @@ import net.aksyo.game.roles.SubRole;
 import net.aksyo.game.roles.gamesroles.subroles.SubRoleType;
 import net.aksyo.game.tasks.MainGameTask;
 import net.aksyo.player.AcePlayer;
+import net.aksyo.utils.LogFormat;
 import org.bukkit.entity.Player;
 
 public class JokerPacteCommand extends AceCommand {
@@ -36,20 +37,26 @@ public class JokerPacteCommand extends AceCommand {
                     return;
                 }
 
-                if (gManager.isJokerPacte() || !tManager.getPactePlayers().contains(acePlayer)) {
+                if (!gManager.isJokerPacte()) {
+                    player.sendMessage(prefix + "§cVous ne pouvez pas passer le pacte du Joker car l'ouverture des propositions se fait a 20 minutes de jeux");
+                    return;
+                }
 
-                    System.out.println("Contains Player in pact : " + tManager.getPactePlayers().contains(acePlayer));
+                if (!tManager.getPactePlayers().stream().anyMatch(acePlayer1 -> acePlayer1.getUUID().compareTo(player.getUniqueId()) == 0)) {
+
                     tManager.getPactePlayers().add(acePlayer);
                     tManager.applyJokerPacte(acePlayer);
 
-                    System.out.println("Joker pacte " + player.getName());
+                    if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Joker pacte " + player.getName());
 
                 } else {
                     player.sendMessage(prefix + "§cVous ne pouvez pas passer le pacte du Joker car " + (MainGameTask.index < 1200 ? "§cl'ouverture des propositions se fait a 20 minutes de jeux" : "§cvous avez deja passer le pacte"));
+                    return;
                 }
 
             } else {
                 player.sendMessage(prefix + "§cVous ne pouvez pas passer le pacte du Joker car vous n'etes pas un Pion Fourbe");
+                return;
             }
 
         }

@@ -53,9 +53,10 @@ public class WorldManager {
 
     }
 
-    public void teleportTeams() {
+    public synchronized void teleportTeams() {
 
         Map<ITeam, HashSet<AcePlayer>> playerList = tManager.getTeamAndMembers();
+
         int i = 0;
 
         for (double angle = 0, inc = 360 / tManager.getTeams().length; angle < 360; angle += inc) {
@@ -75,7 +76,6 @@ public class WorldManager {
 
                 if (playerList.get(team).size() > 0) {
                     acePlayer.getPlayer().teleport(cage.getCageCenter().clone().add(xCoord, 0, zCoord));
-                    playerList.get(team).remove(acePlayer);
                 }
 
             }
@@ -83,7 +83,6 @@ public class WorldManager {
         }
 
     }
-
 
     public void removeCages(GameOption gameOption) {
 

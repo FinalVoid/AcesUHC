@@ -23,6 +23,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class TeamManager {
 
@@ -59,11 +60,6 @@ public class TeamManager {
 
         for (HashSet<AcePlayer> t : TEAMS.values()) {
             set.addAll(t);
-            if (t != null) {
-                for (AcePlayer acePlayer : t) {
-                    System.out.println(acePlayer.getPlayer().getName());
-                }
-            }
         }
 
         return set;
@@ -94,9 +90,12 @@ public class TeamManager {
 
     public AcePlayer getAcePlayer(Player player) {
         for(Set<AcePlayer> list : TEAMS.values()) {
-            Optional<AcePlayer> optional = list.stream().filter(acePlayer -> acePlayer.getPlayer().getUniqueId().compareTo(player.getUniqueId()) == 0).findFirst();
-            if(optional.isPresent()) {
-                return optional.get();
+            Optional<AcePlayer> optionalAlive = list.stream().filter(acePlayer -> acePlayer.getPlayer().getUniqueId().compareTo(player.getUniqueId()) == 0).findFirst();
+            Optional<AcePlayer> optionalDead = deadPlayers.stream().filter(acePlayer -> acePlayer.getPlayer().getUniqueId().compareTo(player.getUniqueId()) == 0).findFirst();
+            if(optionalAlive.isPresent()) {
+                return optionalAlive.get();
+            } else if (optionalDead.isPresent()) {
+                return optionalDead.get();
             }
         }
         return null;
@@ -342,6 +341,21 @@ public class TeamManager {
         BasicUtils.silentBroadcast(" ");
         BasicUtils.silentBroadcast("§aLa team des vainqueurs est : " + team.getGameName()); //TODO Most kills announcement
         BasicUtils.silentBroadcast(" ");
+
+        Set<AcePlayer> allPlayers = new HashSet<>(getAcePlayers());
+        allPlayers.addAll(getDeadPlayers());
+
+        List<AcePlayer> sortedKill = allPlayers.stream().sorted(new Comparator<AcePlayer>() {
+            @Override
+            public int compare(AcePlayer o1, AcePlayer o2) {
+                return o2.getPlayerData().getKills() - o1.getPlayerData().getKills();
+            }
+        }).collect(Collectors.toList());
+
+        for (int i = 0; i < 3; i++) {
+            int pos = i + 1;
+            BasicUtils.silentBroadcast("§aKiller §en" + pos + "§b " + sortedKill.get(0).getPlayer().getName() + " §aavec §b" + sortedKill.get(0).getPlayerData().getKills() + " §akills");
+        }
 
         for (AcePlayer acePlayer : getTeamMembers(team)) {
 

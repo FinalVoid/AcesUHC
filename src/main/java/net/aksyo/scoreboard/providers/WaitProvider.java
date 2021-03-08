@@ -21,7 +21,7 @@ public class WaitProvider extends ScoreboardProvider {
     public List<String> getLines() {
         List<String> lines = new ArrayList<>();
         lines.add(" ");
-        lines.add(ChatColor.YELLOW + " : §9" + BasicUtils.getGameStartingPlayers(GameMode.ADVENTURE).size());
+        lines.add(ChatColor.YELLOW + "Players : §9" + BasicUtils.getGameStartingPlayers(GameMode.ADVENTURE).size());
         lines.add(" ");
         return lines;
     }
