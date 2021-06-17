@@ -71,6 +71,7 @@ public class WorldManager {
             CAGES.add(cage);
 
             int xCoord = new Random().nextInt(teamSize + teamSize / 2) - teamSize * 2, zCoord = new Random().nextInt(teamSize + teamSize / 2) - teamSize * 2;
+            loadPlayerChunck(xCoord, zCoord);
 
             for (AcePlayer acePlayer : playerList.get(team)) {
 
@@ -120,11 +121,11 @@ public class WorldManager {
 
     }
 
-    private void loadPlayerChunck(int x, int z) {
+    public void loadPlayerChunck(int x, int z) {
 
-        for (int i = -64; i < 64; i += 16) {
+        for (int i = -1028; i < 1028; i += 16) {
             world.getChunkAt(x + i , z).load();
-            for (int j = -64; j < 64; j += 16) {
+            for (int j = -1028; j < 1028; j += 16) {
                 world.getChunkAt(x, z + j).load();
             }
         }
@@ -161,24 +162,57 @@ class Cage {
     }
 
     public void setTeamCage(int size) {
-        this.width = size * 2;
-        for (int xCoord = cageCenter.getBlockX() - width; xCoord <= cageCenter.getBlockX() + width; xCoord++) {
-            for (int zCoord = cageCenter.getBlockZ() - 6; zCoord <= cageCenter.getBlockZ() + 6; zCoord++) {
-                cageCenter.clone().add(xCoord, 0, zCoord).getBlock().setTypeIdAndData(Material.STAINED_GLASS.getId(), (byte) 4, false);
-            }
+        cageCenter.subtract(3, 1, 0).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().add(1, 0, 0).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().add(0, 0, 1).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().subtract(0,0, 1).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().subtract(1,0, 0).getBlock().setType(Material.IRON_BLOCK);
 
-        }
+        cageCenter.subtract(-3, 1, 3).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().add(1, 0, 0).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().add(0, 0, 1).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().subtract(0,0, 1).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().subtract(1,0, 0).getBlock().setType(Material.IRON_BLOCK);
+
+        cageCenter.add(3, 1, -3).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().add(1, 0, 0).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().add(0, 0, 1).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().subtract(0,0, 1).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().subtract(1,0, 0).getBlock().setType(Material.IRON_BLOCK);
+
+        cageCenter.add(-3, 1, 3).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().add(1, 0, 0).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().add(0, 0, 1).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().subtract(0,0, 1).getBlock().setType(Material.IRON_BLOCK);
+        cageCenter.clone().subtract(1,0, 0).getBlock().setType(Material.IRON_BLOCK);
 
     }
 
     public void removeTeamCage() {
 
-        for (int xCoord = cageCenter.getBlockX() - width; xCoord <= cageCenter.getBlockX() + width; xCoord++) {
-            for (int zCoord = cageCenter.getBlockZ() - 6; zCoord <= cageCenter.getBlockZ() + 6; zCoord++) {
-                cageCenter.clone().add(xCoord, 0, zCoord).getBlock().setType(Material.AIR);
-            }
+        cageCenter.subtract(3, 1, 0).getBlock().setType(Material.AIR);
+        cageCenter.clone().add(1, 0, 0).getBlock().setType(Material.AIR);
+        cageCenter.clone().add(0, 0, 1).getBlock().setType(Material.AIR);
+        cageCenter.clone().subtract(0,0, 1).getBlock().setType(Material.AIR);
+        cageCenter.clone().subtract(1,0, 0).getBlock().setType(Material.AIR);
 
-        }
+        cageCenter.subtract(-3, 1, 3).getBlock().setType(Material.AIR);
+        cageCenter.clone().add(1, 0, 0).getBlock().setType(Material.AIR);
+        cageCenter.clone().add(0, 0, 1).getBlock().setType(Material.AIR);
+        cageCenter.clone().subtract(0,0, 1).getBlock().setType(Material.AIR);
+        cageCenter.clone().subtract(1,0, 0).getBlock().setType(Material.AIR);
+
+        cageCenter.add(3, 1, -3).getBlock().setType(Material.AIR);
+        cageCenter.clone().add(1, 0, 0).getBlock().setType(Material.AIR);
+        cageCenter.clone().add(0, 0, 1).getBlock().setType(Material.AIR);
+        cageCenter.clone().subtract(0,0, 1).getBlock().setType(Material.AIR);
+        cageCenter.clone().subtract(1,0, 0).getBlock().setType(Material.AIR);
+
+        cageCenter.add(-3, 1, 3).getBlock().setType(Material.AIR);
+        cageCenter.clone().add(1, 0, 0).getBlock().setType(Material.AIR);
+        cageCenter.clone().add(0, 0, 1).getBlock().setType(Material.AIR);
+        cageCenter.clone().subtract(0,0, 1).getBlock().setType(Material.AIR);
+        cageCenter.clone().subtract(1,0, 0).getBlock().setType(Material.AIR);
 
     }
 

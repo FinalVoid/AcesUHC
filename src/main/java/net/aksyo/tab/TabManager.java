@@ -33,5 +33,7 @@ public class TabManager {
 
     }
 
-
+    public HashMap<ITeam, String> getTeamTabDesign() {
+        return teamTabDesign;
+    }
 }

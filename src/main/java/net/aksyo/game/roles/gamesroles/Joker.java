@@ -6,6 +6,7 @@ import net.aksyo.player.AcePlayer;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -44,12 +45,12 @@ public class Joker extends GameRole {
         return acePlayer -> {
             acePlayer.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 24000, 0));
             ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
-            ItemMeta meta = item.getItemMeta();
-            meta.addEnchant(Enchantment.ARROW_DAMAGE, 2, true);
-            meta.addEnchant(Enchantment.ARROW_KNOCKBACK, 1, true);
-            item.setItemMeta(meta);
+            EnchantmentStorageMeta esn = (EnchantmentStorageMeta) item.getItemMeta();
+            esn.addEnchant(Enchantment.ARROW_DAMAGE, 2, true);
+            esn.addEnchant(Enchantment.ARROW_KNOCKBACK, 1, true);
+            item.setItemMeta(esn);
             acePlayer.getPlayer().getInventory().addItem(item);
-            acePlayer.getPlayer().sendMessage(AcesUHC.prefix + "§aTes pouvoirs de Joker se sont activés. Tu as possède desormais un livre §cPower 2 Punch 1");
+            acePlayer.getPlayer().sendMessage(AcesUHC.prefix + "§aTes pouvoirs de Joker se sont activés. Tu possède desormais un livre §cPower 2 Punch 1");
         };
     }
 

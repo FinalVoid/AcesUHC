@@ -62,9 +62,10 @@ public class AcesUHC extends JavaPlugin {
             exception.printStackTrace();
         }
 
-        worldManager.world.setGameRuleValue("keepInventory ", "true");
+        worldManager.world.setGameRuleValue("keepInventory", "true");
         worldManager.world.setGameRuleValue("naturalRegeneration", "false");
         worldManager.world.setDifficulty(Difficulty.EASY);
+        worldManager.loadPlayerChunck(0, 0);
 
 
     }
@@ -123,6 +124,7 @@ public class AcesUHC extends JavaPlugin {
         pluginManager.registerEvents(new PlayerInteractListener(), this);
         pluginManager.registerEvents(new PlayerFoodListener(), this);
         pluginManager.registerEvents(new ScenariosListener(), this);
+        pluginManager.registerEvents(new AsyncChatListener(), this);
 
     }
 

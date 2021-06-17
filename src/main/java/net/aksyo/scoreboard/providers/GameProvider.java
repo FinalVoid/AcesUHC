@@ -34,7 +34,7 @@ public class GameProvider extends ScoreboardProvider {
         AcePlayer acePlayer = AcesUHC.getInstance().getTeamManager().getAcePlayer(player);
         lines.add(" ");
         Date date = new Date((long) (MainGameTask.index) * 1000);
-        String dateFormat = new SimpleDateFormat("mm:ss").format(date);
+        String dateFormat = new SimpleDateFormat("hh:mm:ss").format(date);
 
         if (acePlayer != null){
 

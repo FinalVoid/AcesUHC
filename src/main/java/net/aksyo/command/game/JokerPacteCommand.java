@@ -50,7 +50,7 @@ public class JokerPacteCommand extends AceCommand {
                     if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Joker pacte " + player.getName());
 
                 } else {
-                    player.sendMessage(prefix + "§cVous ne pouvez pas passer le pacte du Joker car " + (MainGameTask.index < 1200 ? "§cl'ouverture des propositions se fait a 20 minutes de jeux" : "§cvous avez deja passer le pacte"));
+                    player.sendMessage(prefix + "§cVous ne pouvez pas passer le pacte du Joker car " + (MainGameTask.index < 1200 ? "§cl'ouverture des propositions se fait a 20 minutes de jeux" : "§cvous avez deja passe le pacte"));
                     return;
                 }
 

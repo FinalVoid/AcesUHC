@@ -83,6 +83,7 @@ public class AcePlayer {
             AcesUHC.getInstance().getGameManager().getImmunePlayers().add(player);
             int x = new Random().nextInt(125), z = new Random().nextInt(125);
             player.teleport(new Location(player.getWorld(), x, 200, z));
+            option = PlayerOption.PLAYER;
             player.setGameMode(GameMode.SURVIVAL);
             playerData.startRecordingTimeLived();
             new BukkitRunnable() {

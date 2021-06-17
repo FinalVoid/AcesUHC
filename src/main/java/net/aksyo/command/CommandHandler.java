@@ -2,6 +2,7 @@ package net.aksyo.command;
 
 import net.aksyo.command.game.JokerPacteCommand;
 import net.aksyo.command.game.RoleCommand;
+import net.aksyo.command.game.TeamChatCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -18,6 +19,8 @@ public class CommandHandler implements CommandExecutor {
         new SetGameModeCommand();
         new SetFoodCommand();
         new StartGameCommand();
+        new TeamChatCommand();
+        new AdminCommand();
 
     }
 

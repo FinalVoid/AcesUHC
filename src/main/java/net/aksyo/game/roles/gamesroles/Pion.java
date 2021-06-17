@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -28,7 +29,7 @@ public class Pion extends GameRole {
 
     @Override
     public String getDescription() {
-        return "Aidez votre As a retrouver ses pouvoirs, et demasquer le pion fourbe.";
+        return "Aidez votre As a retrouver ses pouvoirs.";
     }
 
     @Override
@@ -54,17 +55,17 @@ public class Pion extends GameRole {
                     break;
                 case 1:
                     ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
-                    ItemMeta meta = item.getItemMeta();
-                    meta.addEnchant(Enchantment.DEPTH_STRIDER, 3, true);
-                    item.setItemMeta(meta);
+                    EnchantmentStorageMeta esm = (EnchantmentStorageMeta) item.getItemMeta();
+                    esm.addEnchant(Enchantment.DEPTH_STRIDER, 3, true);
+                    item.setItemMeta(esm);
                     player.getInventory().addItem(item);
                     player.sendMessage(prefix + "§aTes pouvoirs de Pions se sont activés. Tu as possède desormais un livre §cDepth Strider 3");
                     break;
                 case 2:
                     ItemStack item2 = new ItemStack(Material.ENCHANTED_BOOK);
-                    ItemMeta meta2 = item2.getItemMeta();
-                    meta2.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
-                    item2.setItemMeta(meta2);
+                    EnchantmentStorageMeta esm2 = (EnchantmentStorageMeta) item2.getItemMeta();
+                    esm2.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
+                    item2.setItemMeta(esm2);
                     player.getInventory().addItem(item2);
                     player.sendMessage(prefix + "§aTes pouvoirs de Pions se sont activés. Tu as possède desormais un livre §cFeather Falling 4");
                     break;
@@ -73,7 +74,6 @@ public class Pion extends GameRole {
                     AcesUHC.getInstance().getTeamManager().getSaturationPowerPlayers().add(acePlayer);
                     player.sendMessage(prefix + "§aTes pouvoirs de Pions se sont activés. Tu as desormais \n§cSaturation Illimité");
                     break;
-
             }
         };
     }

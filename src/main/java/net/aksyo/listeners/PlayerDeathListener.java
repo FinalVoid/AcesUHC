@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
@@ -29,14 +30,13 @@ public class PlayerDeathListener implements Listener {
         Player player = event.getEntity();
         AcePlayer acePlayer = tManager.getAcePlayer(player);
         //AcePlayer killer = tManager.getAcePlayer(event.getEntity().getKiller());
+
         event.setDeathMessage(" ");
 
         if (acePlayer != null) {
 
-            BasicUtils.silentBroadcast("§c" + player.getName() + "§e est mort! C'etais un : " + (acePlayer.hasSubRole() ? acePlayer.getSubRoleType().get().getGameName() : acePlayer.getRoleType().get().getGameName())
-            + " §eIl faisait partie de l'equipe des : " + acePlayer.getTeam().getGameName());
 
-            acePlayer.kill();
+
             acePlayer.getPlayerData().addDeath();
             acePlayer.getPlayerData().stopRecordingTimeLived();
 
@@ -51,11 +51,16 @@ public class PlayerDeathListener implements Listener {
             if (acePlayer.getRoleType() == RoleType.PION) {
 
                 if (tManager.isAsAlive(acePlayer.getTeam()) && !possibleVictory.getRight()) {
-                    if (!acePlayer.hasSubRole()) {
-                       respawnPion(acePlayer);
-                    }
+                    respawnPion(acePlayer);
                     return;
                 }
+            }
+
+            BasicUtils.silentBroadcast("\n§c" + player.getName() + "§e est mort! C'etais un : " + (acePlayer.hasSubRole() ? acePlayer.getSubRoleType().get().getGameName() : acePlayer.getRoleType().get().getGameName())
+                    + " §eIl faisait partie de l'equipe des : " + acePlayer.getTeam().getGameName());
+
+            for (ItemStack itemStack : player.getInventory().getContents()) {
+                AcesUHC.getInstance().getWorldManager().world.dropItemNaturally(event.getEntity().getLocation(), itemStack);
             }
             return;
 
@@ -84,11 +89,11 @@ public class PlayerDeathListener implements Listener {
                     case 20 :
                         player.setHealthScale(16);
                         break;
-                    case 14:
-                        player.setHealthScale(10);
+                    case 16:
+                        player.setHealthScale(14);
                         break;
                     default:
-                        player.setHealthScale(10);
+                        player.setHealthScale(14);
                         break;
 
                 }

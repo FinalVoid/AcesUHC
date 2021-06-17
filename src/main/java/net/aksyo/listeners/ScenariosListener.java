@@ -8,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Random;
+
 public class ScenariosListener implements Listener {
 
     @EventHandler
@@ -40,6 +42,11 @@ public class ScenariosListener implements Listener {
                 block.getState().update();
                 block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack (Material.GLASS));
                 break;
+
+            case LEAVES:
+                int r = new Random().nextInt(5);
+                if (r == 1) block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.APPLE));
+
 
             default:
                 event.setCancelled(false);

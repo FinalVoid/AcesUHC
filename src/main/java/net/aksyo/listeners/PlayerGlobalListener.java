@@ -22,7 +22,7 @@ public class PlayerGlobalListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
 
 
-        Optional<AcePlayer> optional = teamManager.getAcePlayers().stream().filter(a -> a.getUUID().compareTo(event.getPlayer().getUniqueId()) == 0).findFirst();
+            Optional<AcePlayer> optional = teamManager.getAcePlayers().stream().filter(a -> a.getUUID().compareTo(event.getPlayer().getUniqueId()) == 0).findFirst();
 
         if (optional.isPresent()) {
 

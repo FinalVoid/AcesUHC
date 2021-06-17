@@ -7,6 +7,7 @@ import net.aksyo.utils.BasicUtils;
 import net.aksyo.utils.LogFormat;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -71,6 +72,7 @@ public class MainGameTask extends BukkitRunnable{
 
         if (index == borderReduction) {
             BasicUtils.silentBroadcast(prefix + "§cLa bordure commence a retrecir!");
+            BasicUtils.playSoundToAllPlayer(Sound.ENDERMAN_IDLE);
             AcesUHC.getInstance().getWorldManager().startBorderShrink(150, 1);
         }
 
@@ -83,6 +85,7 @@ public class MainGameTask extends BukkitRunnable{
             if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Pvp activated ! Index : " + index);
 
             gManager.setPvp(true);
+            BasicUtils.playSoundToAllPlayer(Sound.EXPLODE);
             BasicUtils.getGameStartingPlayers(GameMode.SURVIVAL).forEach(p -> p.setHealth(20));
         }
 

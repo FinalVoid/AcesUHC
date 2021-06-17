@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-public class TeamManager {
+public class    TeamManager {
 
     private GameManager gManager = AcesUHC.getInstance().getGameManager();
 
@@ -36,6 +36,7 @@ public class TeamManager {
     private LinkedList<AcePlayer> deadPlayers = new LinkedList<>();
     private HashSet<AcePlayer> pactePlayers = new HashSet<>();
     private HashSet<AcePlayer> saturationPowerPlayers = new HashSet<>();
+    private HashSet<AcePlayer> teamChatPlayers = new HashSet<>();
     private boolean jokerChange = false;
 
     public TeamManager() {
@@ -101,6 +102,14 @@ public class TeamManager {
         return null;
     }
 
+    public AcePlayer getDeadPlayer(Player player) {
+        Optional<AcePlayer> optionalDead = deadPlayers.stream().filter(acePlayer -> acePlayer.getPlayer().getUniqueId().compareTo(player.getUniqueId()) == 0).findFirst();
+        if (optionalDead.isPresent()) {
+            return optionalDead.get();
+        }
+        return null;
+    }
+
     public AcePlayer getJoker() {
         return getAcePlayers().stream().filter(p -> p.getRoleType() == RoleType.JOKER).findFirst().get();
     }
@@ -119,6 +128,10 @@ public class TeamManager {
 
     public LinkedList<AcePlayer> getDeadPlayers() {
         return deadPlayers;
+    }
+
+    public HashSet<AcePlayer> getTeamChatPlayers() {
+        return teamChatPlayers;
     }
 
     public List<AcePlayer> getAlivePlayers() {
@@ -327,6 +340,10 @@ public class TeamManager {
             TEAMS.get(team).forEach(p -> p.getPlayer().sendMessage(jokers.get() + " §aa rejoins votre equipe!"));
             TEAMS.get(JokerTeam.getInstance()).clear();
 
+            BasicUtils.silentBroadcast(" ");
+            BasicUtils.silentBroadcast("§6§lLe Joker a changer de Team! Il est desormais avec les : §r" + team.getGameName());
+            BasicUtils.silentBroadcast(" ");
+
             jokerChange = true;
         }
 
@@ -400,7 +417,7 @@ public class TeamManager {
 
         switch (r) {
             case 0 :
-                player.setHealthScale(10);
+                player.setHealthScale(14f);
                 player.sendMessage(AcesUHC.prefix + "§cVous avez perdu 5 coeurs a cause du pacte!");
                 if (gManager.isDebug()) AcesUHC.getInstance().log(LogFormat.DEBUG, "Pion Fourbe value : " + r + " Player : " + player.getName());
                 break;
